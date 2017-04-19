@@ -1,4 +1,4 @@
-package lush.com.givex;
+package com.lush.givex;
 
 import android.content.Context;
 
