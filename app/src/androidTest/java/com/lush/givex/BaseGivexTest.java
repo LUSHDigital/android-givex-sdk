@@ -24,9 +24,11 @@ public abstract class BaseGivexTest
 	protected static final String CARD_F_NUMBER = "603628356832001640700";
 	protected static final String CARD_F_PIN = "2640";
 
+	protected Givex givex;
+
 	@Before
 	public void setUp() throws Exception
 	{
-
+		//givex = new Givex();
 	}
 }

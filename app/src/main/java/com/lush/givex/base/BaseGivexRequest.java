@@ -6,7 +6,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 
 import com.lush.givex.Environment;
-import com.lush.givex.GivexConfiguration;
 
 /**
  * @author Matt Allen
