@@ -5,7 +5,7 @@ package com.lush.givex.model.request;
  */
 public abstract class BasicRequestData
 {
-	private String code, username, password, languageCode, transactionCode;
+	protected String code, username, password, languageCode, transactionCode;
 
 	public BasicRequestData(String endpoint, String username, String password, String languageCode, String transactionCode)
 	{

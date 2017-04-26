@@ -1,5 +1,7 @@
 package com.lush.givex.model.request;
 
+import java.text.DecimalFormat;
+
 /**
  * @author Matt Allen
  */
@@ -10,7 +12,7 @@ public class ActivateCardRequestData extends BasicRequestData
 
 	public ActivateCardRequestData(String username, String password, String languageCode, String transactionCode, double amount, String cardNumber)
 	{
-		super("906", username, password, languageCode, transactionCode);
+		super("dc_906", username, password, languageCode, transactionCode);
 		this.amount = amount;
 		this.cardNumber = cardNumber;
 	}
@@ -18,7 +20,7 @@ public class ActivateCardRequestData extends BasicRequestData
 	@Override
 	public String getRequestBody()
 	{
-		String format = "[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]";
+		String format = "{\"jsonrpc\":\"2.0\",\"id\":\"5\",\"method\":\"%s\",\"params\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"\",\"\",\"\"]}";
 		return String.format(
 				format,
 				getCode(),
@@ -27,6 +29,6 @@ public class ActivateCardRequestData extends BasicRequestData
 				getUsername(),
 				getPassword(),
 				cardNumber,
-				String.valueOf(amount));
+				new DecimalFormat("0.00").format(amount));
 	}
 }
