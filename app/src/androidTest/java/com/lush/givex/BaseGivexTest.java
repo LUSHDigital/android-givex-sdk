@@ -1,5 +1,6 @@
 package com.lush.givex;
 
+import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Before;
@@ -29,6 +30,6 @@ public abstract class BaseGivexTest
 	@Before
 	public void setUp() throws Exception
 	{
-		//givex = new Givex();
+		givex = new Givex(InstrumentationRegistry.getTargetContext(), "30554", "9614", Environment.TEST, "en");
 	}
 }
