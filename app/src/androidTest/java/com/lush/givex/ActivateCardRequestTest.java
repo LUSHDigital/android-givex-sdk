@@ -37,7 +37,7 @@ public class ActivateCardRequestTest extends BaseGivexTest
 			@Override
 			public void onResponse(ActivateCardResponse response)
 			{
-				assertEquals("906", response.getCode());
+				assertEquals("dc_906", response.getCode());
 				assertEquals(10.00, response.getCardBalance());
 			}
 		}, new Response.ErrorListener()
