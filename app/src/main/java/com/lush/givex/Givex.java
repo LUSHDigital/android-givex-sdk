@@ -42,7 +42,7 @@ public class Givex
 	 */
 	public String createTransactionCode()
 	{
-		return languageCode + "-" + String.valueOf(System.currentTimeMillis());
+		return String.valueOf(System.currentTimeMillis());
 	}
 
 	public String activateCard(String cardNumber, double amount, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
