@@ -32,13 +32,13 @@ public class ActivateCardRequestTest extends BaseGivexTest
 	@Test
 	public void testActivateCard() throws Exception
 	{
-		givex.activateCard(CARD_A_NUMBER, 10.00, new Response.Listener<ActivateCardResponse>()
+		givex.activateCard(CARD_A_NUMBER, 100.00, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
 			public void onResponse(ActivateCardResponse response)
 			{
 				assertEquals("dc_906", response.getCode());
-				assertEquals(10.00, response.getCardBalance());
+				assertEquals(100.00, response.getCardBalance());
 			}
 		}, new Response.ErrorListener()
 		{
