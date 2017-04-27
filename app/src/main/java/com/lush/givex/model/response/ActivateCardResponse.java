@@ -1,6 +1,7 @@
 package com.lush.givex.model.response;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Matt Allen
@@ -13,7 +14,19 @@ public class ActivateCardResponse extends GivexResponse
 	private Date cardExpiration;
 
 	@Override
-	public void fromNetworkResponse(String response)
+	public void parseResult(List<String> result)
+	{
+		switch (result.size())
+		{
+			case 7:
+				// Success
+
+			case 5
+		}
+	}
+
+	@Override
+	public void parseError(List<String> error)
 	{
 
 	}
