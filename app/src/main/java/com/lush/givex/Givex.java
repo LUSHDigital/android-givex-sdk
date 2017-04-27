@@ -7,8 +7,11 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.lush.givex.model.request.ActivateCardRequestData;
+import com.lush.givex.model.request.CancelCardRequestData;
 import com.lush.givex.model.response.ActivateCardResponse;
+import com.lush.givex.model.response.CancelCardResponse;
 import com.lush.givex.request.ActivateCardRequest;
+import com.lush.givex.request.CancelCardRequest;
 
 /**
  * The top-level interface for all actions to be done against the Givex service
@@ -45,16 +48,27 @@ public class Givex
 		return String.valueOf(System.currentTimeMillis());
 	}
 
-	public String activateCard(String cardNumber, double amount, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
+	public void activateCard(String cardNumber, double amount, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		return activateCard(cardNumber, amount, createTransactionCode(), listener, errorListener);
+		activateCard(cardNumber, amount, createTransactionCode(), listener, errorListener);
 	}
 
-	public String activateCard(String cardNumber, double amount, String transactionCode, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
+	public void activateCard(String cardNumber, double amount, String transactionCode, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
 	{
 		ActivateCardRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode, amount, cardNumber);
 		Request request = new ActivateCardRequest(environment, Request.Method.POST, data, listener, errorListener);
 		queue.add(request);
-		return transactionCode;
+	}
+
+	public void cancelCard(String cardNumber, double amount, Response.Listener<CancelCardResponse> listener, Response.ErrorListener errorListener)
+	{
+		cancelCard(createTransactionCode(), cardNumber, amount, listener, errorListener);
+	}
+
+	public void cancelCard(String transactionCode, String cardNumber, double amount, Response.Listener<CancelCardResponse> listener, Response.ErrorListener errorListener)
+	{
+		CancelCardRequestData data = new CancelCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+		CancelCardRequest request = new CancelCardRequest(data, environment, listener, errorListener);
+		queue.add(request);
 	}
 }
