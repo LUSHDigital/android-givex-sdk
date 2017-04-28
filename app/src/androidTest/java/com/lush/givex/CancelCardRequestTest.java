@@ -11,6 +11,8 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
 
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 /**
@@ -37,6 +39,8 @@ public class CancelCardRequestTest extends BaseGivexTest
 			public void onResponse(CancelCardResponse response)
 			{
 				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertEquals(0.00, response.getRemainingBalance());
 			}
 		}, new Response.ErrorListener()
 		{
