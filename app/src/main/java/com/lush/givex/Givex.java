@@ -9,12 +9,15 @@ import com.android.volley.toolbox.Volley;
 import com.lush.givex.model.request.ActivateCardRequestData;
 import com.lush.givex.model.request.CancelCardRequestData;
 import com.lush.givex.model.request.GetBalanceRequestData;
+import com.lush.givex.model.request.TopUpCardRequestData;
 import com.lush.givex.model.response.ActivateCardResponse;
 import com.lush.givex.model.response.CancelCardResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
+import com.lush.givex.model.response.TopUpCardResponse;
 import com.lush.givex.request.ActivateCardRequest;
 import com.lush.givex.request.CancelCardRequest;
 import com.lush.givex.request.GetBalanceRequest;
+import com.lush.givex.request.TopUpCardRequest;
 
 /**
  * The top-level interface for all actions to be done against the Givex service
@@ -84,6 +87,18 @@ public class Givex
 	{
 		GetBalanceRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode, cardNumber);
 		GetBalanceRequest request = new GetBalanceRequest(data, environment, listener, errorListener);
+		queue.add(request);
+	}
+
+	public void topUp(String cardNumber, double amount, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
+	{
+		topUp(cardNumber, amount, createTransactionCode(), listener, errorListener);
+	}
+
+	public void topUp(String cardNumber, double amount, String transactionCode, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
+	{
+		TopUpCardRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+		TopUpCardRequest request = new TopUpCardRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
 }
