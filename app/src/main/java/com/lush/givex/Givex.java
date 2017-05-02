@@ -8,10 +8,13 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.lush.givex.model.request.ActivateCardRequestData;
 import com.lush.givex.model.request.CancelCardRequestData;
+import com.lush.givex.model.request.GetBalanceRequestData;
 import com.lush.givex.model.response.ActivateCardResponse;
 import com.lush.givex.model.response.CancelCardResponse;
+import com.lush.givex.model.response.GetBalanceResponse;
 import com.lush.givex.request.ActivateCardRequest;
 import com.lush.givex.request.CancelCardRequest;
+import com.lush.givex.request.GetBalanceRequest;
 
 /**
  * The top-level interface for all actions to be done against the Givex service
@@ -69,6 +72,18 @@ public class Givex
 	{
 		CancelCardRequestData data = new CancelCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
 		CancelCardRequest request = new CancelCardRequest(data, environment, listener, errorListener);
+		queue.add(request);
+	}
+
+	public void getBalance(String cardNumber, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener)
+	{
+		getBalance(cardNumber, createTransactionCode(), listener, errorListener);
+	}
+
+	public void getBalance(String cardNumber, String transactionCode, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener)
+	{
+		GetBalanceRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode, cardNumber);
+		GetBalanceRequest request = new GetBalanceRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
 }
