@@ -75,6 +75,12 @@ public class CancelCardResponse extends GivexResponse
 		// TODO
 	}
 
+	@Override
+	public boolean isSuccess()
+	{
+		return success;
+	}
+
 	public String getTransactionCode()
 	{
 		return transactionCode;
@@ -108,10 +114,5 @@ public class CancelCardResponse extends GivexResponse
 	public Date getExpirationDate()
 	{
 		return expirationDate;
-	}
-
-	public boolean isSuccess()
-	{
-		return success;
 	}
 }

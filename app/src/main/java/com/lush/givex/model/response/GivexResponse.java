@@ -26,4 +26,5 @@ public abstract class GivexResponse
 
 	public abstract void parseResult(List<String> result);
 	public abstract void parseError(List<String> error);
+	public abstract boolean isSuccess();
 }

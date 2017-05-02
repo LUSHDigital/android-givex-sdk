@@ -76,6 +76,12 @@ public class ActivateCardResponse extends GivexResponse
 
 	}
 
+	@Override
+	public boolean isSuccess()
+	{
+		return success;
+	}
+
 	public String getTransactionCode()
 	{
 		return transactionCode;
@@ -109,10 +115,5 @@ public class ActivateCardResponse extends GivexResponse
 	public String getReceiptMessage()
 	{
 		return receiptMessage;
-	}
-
-	public boolean isSuccess()
-	{
-		return success;
 	}
 }
