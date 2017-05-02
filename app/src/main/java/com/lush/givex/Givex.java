@@ -9,14 +9,17 @@ import com.android.volley.toolbox.Volley;
 import com.lush.givex.model.request.ActivateCardRequestData;
 import com.lush.givex.model.request.CancelCardRequestData;
 import com.lush.givex.model.request.GetBalanceRequestData;
+import com.lush.givex.model.request.RedemptionRequestData;
 import com.lush.givex.model.request.TopUpCardRequestData;
 import com.lush.givex.model.response.ActivateCardResponse;
 import com.lush.givex.model.response.CancelCardResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
+import com.lush.givex.model.response.RedemptionResponse;
 import com.lush.givex.model.response.TopUpCardResponse;
 import com.lush.givex.request.ActivateCardRequest;
 import com.lush.givex.request.CancelCardRequest;
 import com.lush.givex.request.GetBalanceRequest;
+import com.lush.givex.request.RedemptionRequest;
 import com.lush.givex.request.TopUpCardRequest;
 
 /**
@@ -99,6 +102,18 @@ public class Givex
 	{
 		TopUpCardRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
 		TopUpCardRequest request = new TopUpCardRequest(data, environment, listener, errorListener);
+		queue.add(request);
+	}
+
+	public void redeem(String cardNumber, double amount, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
+	{
+		redeem(cardNumber, amount, createTransactionCode(), listener, errorListener);
+	}
+
+	public void redeem(String cardNumber, double amount, String transactionCode, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
+	{
+		RedemptionRequestData data = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+		RedemptionRequest request = new RedemptionRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
 }
