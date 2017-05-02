@@ -12,6 +12,7 @@ import org.junit.runner.RunWith;
 import java.util.concurrent.CountDownLatch;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
 /**
@@ -38,8 +39,7 @@ public class ActivateCardRequestTest extends BaseGivexTest
 			public void onResponse(ActivateCardResponse response)
 			{
 				latch.countDown();
-				assertEquals("dc_906", response.getCode());
-				assertEquals(100.00, response.getCardBalance());
+				assertTrue(response.isSuccess());
 			}
 		}, new Response.ErrorListener()
 		{
