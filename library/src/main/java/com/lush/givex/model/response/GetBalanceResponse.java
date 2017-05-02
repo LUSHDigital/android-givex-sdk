@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * Possible result codes:
+ *
+ * <ul>
+ *     <li>Code 0: All good</li>
+ *     <li>Code 2: Card not activated</li>
+ * </ul>
+ *
  * @author Matt Allen
  */
 public class GetBalanceResponse extends GivexResponse
@@ -40,7 +47,11 @@ public class GetBalanceResponse extends GivexResponse
 				success = true;
 				break;
 
-			// TODO This will also need to account for the card not being activated (Error)
+			case 3:
+				transactionCode = result.get(0);
+				this.result = Integer.parseInt(result.get(1));
+				error = result.get(2);
+				break;
 		}
 	}
 
