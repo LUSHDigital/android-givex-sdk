@@ -7,17 +7,17 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.lush.givex.model.request.ActivateCardRequestData;
-import com.lush.givex.model.request.CancelCardRequestData;
+import com.lush.givex.model.request.CancelTransactionRequestData;
 import com.lush.givex.model.request.GetBalanceRequestData;
 import com.lush.givex.model.request.RedemptionRequestData;
 import com.lush.givex.model.request.TopUpCardRequestData;
 import com.lush.givex.model.response.ActivateCardResponse;
-import com.lush.givex.model.response.CancelCardResponse;
+import com.lush.givex.model.response.CancelTransactionResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
 import com.lush.givex.model.response.RedemptionResponse;
 import com.lush.givex.model.response.TopUpCardResponse;
 import com.lush.givex.request.ActivateCardRequest;
-import com.lush.givex.request.CancelCardRequest;
+import com.lush.givex.request.CancelTransactionRequest;
 import com.lush.givex.request.GetBalanceRequest;
 import com.lush.givex.request.RedemptionRequest;
 import com.lush.givex.request.TopUpCardRequest;
@@ -69,15 +69,10 @@ public class Givex
 		queue.add(request);
 	}
 
-	public void cancelCard(String cardNumber, double amount, Response.Listener<CancelCardResponse> listener, Response.ErrorListener errorListener)
+	public void cancelTransaction(String transactionCode, String cardNumber, double amount, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
 	{
-		cancelCard(createTransactionCode(), cardNumber, amount, listener, errorListener);
-	}
-
-	public void cancelCard(String transactionCode, String cardNumber, double amount, Response.Listener<CancelCardResponse> listener, Response.ErrorListener errorListener)
-	{
-		CancelCardRequestData data = new CancelCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
-		CancelCardRequest request = new CancelCardRequest(data, environment, listener, errorListener);
+		CancelTransactionRequestData data = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+		CancelTransactionRequest request = new CancelTransactionRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
 

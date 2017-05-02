@@ -5,12 +5,12 @@ import java.text.DecimalFormat;
 /**
  * @author Matt Allen
  */
-public class CancelCardRequestData extends BasicRequestData
+public class CancelTransactionRequestData extends BasicRequestData
 {
 	private String cardNumber;
 	private double amount;
 
-	public CancelCardRequestData(String username, String password, String languageCode, String transactionCode, String cardNumber, double amount)
+	public CancelTransactionRequestData(String username, String password, String languageCode, String transactionCode, String cardNumber, double amount)
 	{
 		super("dc_907", username, password, languageCode, transactionCode);
 		this.cardNumber = cardNumber;

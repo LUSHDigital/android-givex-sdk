@@ -15,7 +15,7 @@ import java.util.Locale;
  *
  * @author Matt Allen
  */
-public class CancelCardResponse extends GivexResponse
+public class CancelTransactionResponse extends GivexResponse
 {
 	private String transactionCode, transactionReference, error, receiptMessage;
 	private int result;
