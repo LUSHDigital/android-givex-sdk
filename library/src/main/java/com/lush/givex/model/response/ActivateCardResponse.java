@@ -10,6 +10,7 @@ import java.util.Locale;
  * Possible error codes are stored here as they appear:
  *
  * <ul>
+ *     <li>Code 2: Certificate does not exist. Cannot be activated.</li>
  *     <li>Code 8: Card already activated</li>
  *     <li>Code 12: Incorrect amount</li>
  * </ul>
