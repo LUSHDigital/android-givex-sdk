@@ -10,6 +10,7 @@ import java.util.Locale;
  * Known result codes:
  *
  * <ul>
+ *     <li>Code 13: Wrong amount (But still actually cancels the transaction?)</li>
  *     <li>Code 15: Transaction too old</li>
  * </ul>
  *
