@@ -12,6 +12,7 @@ import java.util.Locale;
  * <ul>
  *     <li>Code 0: All good</li>
  *     <li>Code 2: Card not activated</li>
+ *     <li>Code 6: Gift card expired</li>
  * </ul>
  *
  * @author Matt Allen
