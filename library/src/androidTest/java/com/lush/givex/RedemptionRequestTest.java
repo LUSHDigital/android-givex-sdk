@@ -33,7 +33,7 @@ public class RedemptionRequestTest extends BaseGivexTest
 	@Test
 	public void testRedemption() throws Exception
 	{
-		givex.redeem(CARD_A_NUMBER, 49.99, new Response.Listener<RedemptionResponse>()
+		givex.redeem(CARD_A_NUMBER, 10.42, new Response.Listener<RedemptionResponse>()
 		{
 			@Override
 			public void onResponse(RedemptionResponse response)
@@ -56,7 +56,7 @@ public class RedemptionRequestTest extends BaseGivexTest
 	@Test
 	public void testRedemptionWithSecurityCode() throws Exception
 	{
-		givex.redeem(CARD_A_NUMBER, 49.99, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<RedemptionResponse>()
+		givex.redeem(CARD_A_NUMBER, 8.51, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<RedemptionResponse>()
 		{
 			@Override
 			public void onResponse(RedemptionResponse response)
