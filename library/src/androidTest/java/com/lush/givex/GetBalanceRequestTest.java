@@ -32,7 +32,7 @@ public class GetBalanceRequestTest extends BaseGivexTest
 	}
 
 	@Test
-	public void testGetBalance() throws Exception
+	public void testGetBalanceCardA() throws Exception
 	{
 		givex.getBalance(CARD_A_NUMBER, new Response.Listener<GetBalanceResponse>()
 		{
@@ -56,9 +56,57 @@ public class GetBalanceRequestTest extends BaseGivexTest
 	}
 
 	@Test
-	public void testGetBalanceWithSecurityCode() throws Exception
+	public void testGetBalanceCardAWithSecurityCode() throws Exception
 	{
 		givex.getBalance(CARD_A_NUMBER, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<GetBalanceResponse>()
+		{
+			@Override
+			public void onResponse(GetBalanceResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(0.00 != response.getBalance());
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testGetBalanceCardB() throws Exception
+	{
+		givex.getBalance(CARD_B_NUMBER, new Response.Listener<GetBalanceResponse>()
+		{
+			@Override
+			public void onResponse(GetBalanceResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(0.00 != response.getBalance());
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testGetBalanceCardBWithSecurityCode() throws Exception
+	{
+		givex.getBalance(CARD_B_NUMBER, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
 			public void onResponse(GetBalanceResponse response)

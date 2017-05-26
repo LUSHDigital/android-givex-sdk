@@ -31,7 +31,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	}
 
 	@Test
-	public void testTopUp() throws Exception
+	public void testTopUpCardA() throws Exception
 	{
 		givex.topUp(CARD_A_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
@@ -55,9 +55,153 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	}
 
 	@Test
-	public void testTopUpWithSecurityCode() throws Exception
+	public void testTopUpCardAWithSecurityCode() throws Exception
 	{
 		givex.topUp(CARD_A_NUMBER, 75.00, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<TopUpCardResponse>()
+		{
+			@Override
+			public void onResponse(TopUpCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(response.getNewBalance() > 75.00);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testTopUpCardB() throws Exception
+	{
+		givex.topUp(CARD_B_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
+		{
+			@Override
+			public void onResponse(TopUpCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(response.getNewBalance() > 75.00);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testTopUpCardBWithSecurityCode() throws Exception
+	{
+		givex.topUp(CARD_B_NUMBER, 75.00, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<TopUpCardResponse>()
+		{
+			@Override
+			public void onResponse(TopUpCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(response.getNewBalance() > 75.00);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testTopUpCardC() throws Exception
+	{
+		givex.topUp(CARD_C_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
+		{
+			@Override
+			public void onResponse(TopUpCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(response.getNewBalance() > 75.00);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testTopUpCardCWithSecurityCode() throws Exception
+	{
+		givex.topUp(CARD_C_NUMBER, 75.00, givex.createTransactionCode(), CARD_C_PIN, new Response.Listener<TopUpCardResponse>()
+		{
+			@Override
+			public void onResponse(TopUpCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(response.getNewBalance() > 75.00);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testTopUpCardD() throws Exception
+	{
+		givex.topUp(CARD_D_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
+		{
+			@Override
+			public void onResponse(TopUpCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(response.getNewBalance() > 75.00);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
+
+	@Test
+	public void testTopUpCardDWithSecurityCode() throws Exception
+	{
+		givex.topUp(CARD_D_NUMBER, 75.00, givex.createTransactionCode(), CARD_D_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
 			public void onResponse(TopUpCardResponse response)
