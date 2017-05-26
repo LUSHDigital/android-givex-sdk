@@ -41,7 +41,7 @@ public class GetBalanceRequestTest extends BaseGivexTest
 			{
 				latch.countDown();
 				assertTrue(response.isSuccess());
-				assertEquals(100.00, response.getBalance());
+				assertTrue(0.00 != response.getBalance());
 			}
 		}, new Response.ErrorListener()
 		{
