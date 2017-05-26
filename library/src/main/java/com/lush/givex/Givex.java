@@ -59,55 +59,60 @@ public class Givex
 
 	public void activateCard(String cardNumber, double amount, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		activateCard(cardNumber, amount, createTransactionCode(), listener, errorListener);
+		activateCard(cardNumber, amount, createTransactionCode(), "", listener, errorListener);
 	}
 
-	public void activateCard(String cardNumber, double amount, String transactionCode, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
+	public void activateCard(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		ActivateCardRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode, amount, cardNumber);
+		ActivateCardRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode, amount, cardNumber, securityCode);
 		Request request = new ActivateCardRequest(environment, Request.Method.POST, data, listener, errorListener);
 		queue.add(request);
 	}
 
 	public void cancelTransaction(String transactionCode, String cardNumber, double amount, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
 	{
-		CancelTransactionRequestData data = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+		cancelTransaction(transactionCode, cardNumber, amount, "", "", listener, errorListener);
+	}
+
+	public void cancelTransaction(String transactionCode, String cardNumber, double amount, String givexAuthCode, String securityCode, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
+	{
+		CancelTransactionRequestData data = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, givexAuthCode, securityCode);
 		CancelTransactionRequest request = new CancelTransactionRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
 
 	public void getBalance(String cardNumber, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener)
 	{
-		getBalance(cardNumber, createTransactionCode(), listener, errorListener);
+		getBalance(cardNumber, createTransactionCode(), "", listener, errorListener);
 	}
 
-	public void getBalance(String cardNumber, String transactionCode, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener)
+	public void getBalance(String cardNumber, String transactionCode, String securityCode, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener)
 	{
-		GetBalanceRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode, cardNumber);
+		GetBalanceRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode, cardNumber, securityCode);
 		GetBalanceRequest request = new GetBalanceRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
 
 	public void topUp(String cardNumber, double amount, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		topUp(cardNumber, amount, createTransactionCode(), listener, errorListener);
+		topUp(cardNumber, amount, createTransactionCode(), "", listener, errorListener);
 	}
 
-	public void topUp(String cardNumber, double amount, String transactionCode, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
+	public void topUp(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		TopUpCardRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+		TopUpCardRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
 		TopUpCardRequest request = new TopUpCardRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
 
 	public void redeem(String cardNumber, double amount, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
 	{
-		redeem(cardNumber, amount, createTransactionCode(), listener, errorListener);
+		redeem(cardNumber, amount, createTransactionCode(), "", listener, errorListener);
 	}
 
-	public void redeem(String cardNumber, double amount, String transactionCode, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
+	public void redeem(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
 	{
-		RedemptionRequestData data = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+		RedemptionRequestData data = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
 		RedemptionRequest request = new RedemptionRequest(data, environment, listener, errorListener);
 		queue.add(request);
 	}
