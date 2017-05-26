@@ -52,4 +52,27 @@ public class ActivateCardRequestTest extends BaseGivexTest
 		});
 		latch.await();
 	}
+
+	@Test
+	public void testActivateCardWithSecurityCode() throws Exception
+	{
+		givex.activateCard(CARD_A_NUMBER, 100.00, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<ActivateCardResponse>()
+		{
+			@Override
+			public void onResponse(ActivateCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess() || response.getResult() == 8);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
 }

@@ -52,4 +52,27 @@ public class RedemptionRequestTest extends BaseGivexTest
 		});
 		latch.await();
 	}
+
+	@Test
+	public void testRedemptionWithSecurityCode() throws Exception
+	{
+		givex.redeem(CARD_A_NUMBER, 49.99, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<RedemptionResponse>()
+		{
+			@Override
+			public void onResponse(RedemptionResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
 }

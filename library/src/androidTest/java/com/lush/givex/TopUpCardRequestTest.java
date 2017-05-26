@@ -53,4 +53,28 @@ public class TopUpCardRequestTest extends BaseGivexTest
 		});
 		latch.await();
 	}
+
+	@Test
+	public void testTopUpWithSecurityCode() throws Exception
+	{
+		givex.topUp(CARD_A_NUMBER, 100.00, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<TopUpCardResponse>()
+		{
+			@Override
+			public void onResponse(TopUpCardResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(response.getNewBalance() > 100.00);
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
 }

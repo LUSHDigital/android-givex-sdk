@@ -54,4 +54,28 @@ public class GetBalanceRequestTest extends BaseGivexTest
 		});
 		latch.await();
 	}
+
+	@Test
+	public void testGetBalanceWithSecurityCode() throws Exception
+	{
+		givex.getBalance(CARD_A_NUMBER, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<GetBalanceResponse>()
+		{
+			@Override
+			public void onResponse(GetBalanceResponse response)
+			{
+				latch.countDown();
+				assertTrue(response.isSuccess());
+				assertTrue(0.00 != response.getBalance());
+			}
+		}, new Response.ErrorListener()
+		{
+			@Override
+			public void onErrorResponse(VolleyError error)
+			{
+				latch.countDown();
+				fail();
+			}
+		});
+		latch.await();
+	}
 }
