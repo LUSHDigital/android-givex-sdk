@@ -1,5 +1,7 @@
 package com.lush.givex.base;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
@@ -19,6 +21,7 @@ import java.util.Map;
  */
 public abstract class BaseGivexRequest<T> extends Request<T>
 {
+	private static final String TAG = BaseGivexRequest.class.getSimpleName();
 	private static final String BASE_URL = "https://dev-dataconnect.givex.com";
 
 	private Response.Listener<T> listener;
@@ -37,11 +40,17 @@ public abstract class BaseGivexRequest<T> extends Request<T>
 	@Override
 	public String getUrl()
 	{
+		String url;
 		if (environment == Environment.TEST)
 		{
-			return BASE_URL + ":50104";
+			url = BASE_URL + ":50104";
 		}
-		return BASE_URL;
+		else
+		{
+			url = BASE_URL;
+		}
+		Log.v(TAG, url);
+		return url;
 	}
 
 	@Override
@@ -58,6 +67,7 @@ public abstract class BaseGivexRequest<T> extends Request<T>
 		String json = new String(response.data);
 		if (json.trim().length() > 0)
 		{
+			Log.v(TAG, json);
 			T responseObj;
 			try
 			{
@@ -92,6 +102,7 @@ public abstract class BaseGivexRequest<T> extends Request<T>
 		if (getMethod() == Method.POST)
 		{
 			String body = data.getRequestBody();
+			Log.v(TAG, body);
 			try
 			{
 				return body.getBytes("UTF-8");
