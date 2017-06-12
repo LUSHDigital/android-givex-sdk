@@ -1,6 +1,7 @@
 package com.lush.givex;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -34,6 +35,7 @@ public class GetBalanceRequestTest extends BaseGivexTest
 	@Test
 	public void testGetBalanceCardA() throws Exception
 	{
+		Log.v(LOG_TAG, "Get balance of card A");
 		givex.getBalance(CARD_A_NUMBER, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
@@ -58,6 +60,7 @@ public class GetBalanceRequestTest extends BaseGivexTest
 	@Test
 	public void testGetBalanceCardAWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Get balance of card A using security code");
 		givex.getBalance(CARD_A_NUMBER, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
@@ -82,6 +85,7 @@ public class GetBalanceRequestTest extends BaseGivexTest
 	@Test
 	public void testGetBalanceCardB() throws Exception
 	{
+		Log.v(LOG_TAG, "Get balance of card B");
 		givex.getBalance(CARD_B_NUMBER, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
@@ -106,6 +110,7 @@ public class GetBalanceRequestTest extends BaseGivexTest
 	@Test
 	public void testGetBalanceCardBWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Get balance of card B using security code");
 		givex.getBalance(CARD_B_NUMBER, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override

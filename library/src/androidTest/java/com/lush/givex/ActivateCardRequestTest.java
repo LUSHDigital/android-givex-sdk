@@ -1,6 +1,7 @@
 package com.lush.givex;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +34,7 @@ public class ActivateCardRequestTest extends BaseGivexTest
 	@Test
 	public void testActivateCardA() throws Exception
 	{
+		Log.v(LOG_TAG, "Activate card A with £100");
 		givex.activateCard(CARD_A_NUMBER, 100.00, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
@@ -56,6 +58,7 @@ public class ActivateCardRequestTest extends BaseGivexTest
 	@Test
 	public void testActivateCardAWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Activate Card A with £100 using security code");
 		givex.activateCard(CARD_A_NUMBER, 100.00, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
@@ -79,6 +82,7 @@ public class ActivateCardRequestTest extends BaseGivexTest
 	@Test
 	public void testActivateCardB() throws Exception
 	{
+		Log.v(LOG_TAG, "Activate card B with £100");
 		givex.activateCard(CARD_B_NUMBER, 100.00, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
@@ -102,6 +106,7 @@ public class ActivateCardRequestTest extends BaseGivexTest
 	@Test
 	public void testActivateCardBWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Activate card B with £100 using security code");
 		givex.activateCard(CARD_B_NUMBER, 100.00, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override

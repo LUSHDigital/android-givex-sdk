@@ -1,6 +1,7 @@
 package com.lush.givex;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +34,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardA() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card A with £75");
 		givex.topUp(CARD_A_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -57,6 +59,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardAWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card A with £75 using security code");
 		givex.topUp(CARD_A_NUMBER, 75.00, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -81,6 +84,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardB() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card B with £75");
 		givex.topUp(CARD_B_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -105,6 +109,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardBWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card B with £75 using security code");
 		givex.topUp(CARD_B_NUMBER, 75.00, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -129,6 +134,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardC() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card C with £75");
 		givex.topUp(CARD_C_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -153,6 +159,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardCWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card C with £75 using security code");
 		givex.topUp(CARD_C_NUMBER, 75.00, givex.createTransactionCode(), CARD_C_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -177,6 +184,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardD() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card D with £75");
 		givex.topUp(CARD_D_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -201,6 +209,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 	@Test
 	public void testTopUpCardDWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Top up card D with £75 using security code");
 		givex.topUp(CARD_D_NUMBER, 75.00, givex.createTransactionCode(), CARD_D_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override

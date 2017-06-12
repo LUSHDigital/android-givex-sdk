@@ -1,6 +1,7 @@
 package com.lush.givex;
 
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -33,6 +34,7 @@ public class RedemptionRequestTest extends BaseGivexTest
 	@Test
 	public void testRedemption() throws Exception
 	{
+		Log.v(LOG_TAG, "Redeem £10.42 from card A");
 		givex.redeem(CARD_A_NUMBER, 10.42, new Response.Listener<RedemptionResponse>()
 		{
 			@Override
@@ -56,6 +58,7 @@ public class RedemptionRequestTest extends BaseGivexTest
 	@Test
 	public void testRedemptionWithSecurityCode() throws Exception
 	{
+		Log.v(LOG_TAG, "Redeem £8.51 from card A using security code");
 		givex.redeem(CARD_A_NUMBER, 8.51, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<RedemptionResponse>()
 		{
 			@Override

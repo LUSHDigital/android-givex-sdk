@@ -12,6 +12,8 @@ import org.junit.runner.RunWith;
 @RunWith(AndroidJUnit4.class)
 public abstract class BaseGivexTest
 {
+	protected static final String LOG_TAG = "GivexTests";
+
 	protected static final String CARD_A_NUMBER = "603628851842001640659";
 	protected static final String CARD_A_PIN = "2335";
 	protected static final String CARD_B_NUMBER = "603628336542001640668";
