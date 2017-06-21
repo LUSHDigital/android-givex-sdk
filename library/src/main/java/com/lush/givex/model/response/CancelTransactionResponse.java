@@ -29,24 +29,10 @@ public class CancelTransactionResponse extends GivexResponse
 	{
 		transactionCode = result.get(0);
 		this.result = Integer.parseInt(result.get(1));
-		SimpleDateFormat sdf = new SimpleDateFormat("", Locale.US); // TODO Date format
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		switch (result.size())
 		{
-			case 5:
-				transactionReference = result.get(2);
-				remainingBalance = Double.parseDouble(result.get(3));
-				try
-				{
-					expirationDate = sdf.parse(result.get(4));
-				}
-				catch (ParseException e)
-				{
-					e.printStackTrace();
-				}
-				success = true;
-				break;
-
-			case 6:
+			case 7:
 				transactionReference = result.get(2);
 				remainingBalance = Double.parseDouble(result.get(3));
 				try

@@ -30,7 +30,7 @@ public class ActivateCardResponse extends GivexResponse
 	{
 		transactionCode = result.get(0);
 		this.result = Integer.parseInt(result.get(1));
-		SimpleDateFormat sdf = new SimpleDateFormat("", Locale.US); // TODO Date format
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		switch (result.size())
 		{
 			case 5:
