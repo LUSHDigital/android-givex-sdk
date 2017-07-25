@@ -69,9 +69,9 @@ public class Givex
 		queue.add(request);
 	}
 
-	public void cancelTransaction(String transactionCode, String cardNumber, double amount, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
+	public void cancelTransaction(String cardNumber, double amount, String authCode, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
 	{
-		cancelTransaction(transactionCode, cardNumber, amount, "", "", listener, errorListener);
+		cancelTransaction(createTransactionCode(), cardNumber, amount, authCode, "", listener, errorListener);
 	}
 
 	public void cancelTransaction(String transactionCode, String cardNumber, double amount, String givexAuthCode, String securityCode, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
