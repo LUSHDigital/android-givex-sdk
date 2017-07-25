@@ -23,7 +23,7 @@ import com.lush.givex.request.RedemptionRequest;
 import com.lush.givex.request.TopUpCardRequest;
 
 /**
- * The top-level interface for all actions to be done against the Givex service
+ * The top-level interface for all actions to be done against the Givex service.
  *
  * @author Matt Allen
  */
@@ -48,7 +48,7 @@ public class Givex
 	}
 
 	/**
-	 * Some requests require a transaction code to be a part of the request.
+	 * Requests require a transaction code to be a part of the request.
 	 *
 	 * @return Generated transaction code based on environment variables.
 	 */
