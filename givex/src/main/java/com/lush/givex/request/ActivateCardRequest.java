@@ -11,9 +11,9 @@ import com.lush.givex.model.response.ActivateCardResponse;
  */
 public class ActivateCardRequest extends BaseGivexRequest<ActivateCardResponse>
 {
-	public ActivateCardRequest(Environment environment, int method, ActivateCardRequestData data, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
+	public ActivateCardRequest(String baseUrl, int method, ActivateCardRequestData data, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		super(method, data, environment, listener, errorListener);
+		super(method, data, baseUrl, listener, errorListener);
 	}
 
 	@Override

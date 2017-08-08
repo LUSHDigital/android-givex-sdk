@@ -30,20 +30,19 @@ import com.lush.givex.request.TopUpCardRequest;
 public class Givex
 {
 	private RequestQueue queue;
-	private String username, password, languageCode;
-	private Environment environment;
+	private String username, password, languageCode, baseUrl;
 
 	public Givex(Context context, String username, String password, String languageCode)
 	{
 		this(context, username, password, Environment.PROD, languageCode);
 	}
 
-	public Givex(Context context, String username, String password, Environment environment, String languageCode)
+	public Givex(Context context, String username, String password, String baseUrl, String languageCode)
 	{
 		this.queue = Volley.newRequestQueue(context);
 		this.username = username;
 		this.password = password;
-		this.environment = environment;
+		this.baseUrl = baseUrl;
 		this.languageCode = languageCode;
 	}
 
@@ -65,7 +64,7 @@ public class Givex
 	public void activateCard(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener)
 	{
 		ActivateCardRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode, amount, cardNumber, securityCode);
-		Request request = new ActivateCardRequest(environment, Request.Method.POST, data, listener, errorListener);
+		Request request = new ActivateCardRequest(baseUrl, Request.Method.POST, data, listener, errorListener);
 		queue.add(request);
 	}
 
@@ -77,7 +76,7 @@ public class Givex
 	public void cancelTransaction(String transactionCode, String cardNumber, double amount, String givexAuthCode, String securityCode, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
 	{
 		CancelTransactionRequestData data = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, givexAuthCode, securityCode);
-		CancelTransactionRequest request = new CancelTransactionRequest(data, environment, listener, errorListener);
+		CancelTransactionRequest request = new CancelTransactionRequest(data, baseUrl, listener, errorListener);
 		queue.add(request);
 	}
 
@@ -89,7 +88,7 @@ public class Givex
 	public void getBalance(String cardNumber, String transactionCode, String securityCode, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener)
 	{
 		GetBalanceRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode, cardNumber, securityCode);
-		GetBalanceRequest request = new GetBalanceRequest(data, environment, listener, errorListener);
+		GetBalanceRequest request = new GetBalanceRequest(data, baseUrl, listener, errorListener);
 		queue.add(request);
 	}
 
@@ -101,7 +100,7 @@ public class Givex
 	public void topUp(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
 	{
 		TopUpCardRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		TopUpCardRequest request = new TopUpCardRequest(data, environment, listener, errorListener);
+		TopUpCardRequest request = new TopUpCardRequest(data, baseUrl, listener, errorListener);
 		queue.add(request);
 	}
 
@@ -113,7 +112,7 @@ public class Givex
 	public void redeem(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
 	{
 		RedemptionRequestData data = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		RedemptionRequest request = new RedemptionRequest(data, environment, listener, errorListener);
+		RedemptionRequest request = new RedemptionRequest(data, baseUrl, listener, errorListener);
 		queue.add(request);
 	}
 }

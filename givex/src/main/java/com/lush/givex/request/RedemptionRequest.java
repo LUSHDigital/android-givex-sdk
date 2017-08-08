@@ -11,9 +11,9 @@ import com.lush.givex.model.response.RedemptionResponse;
  */
 public class RedemptionRequest extends BaseGivexRequest<RedemptionResponse>
 {
-	public RedemptionRequest(BasicRequestData data, Environment environment, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
+	public RedemptionRequest(BasicRequestData data, String baseUrl, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
 	{
-		super(Method.POST, data, environment, listener, errorListener);
+		super(Method.POST, data, baseUrl, listener, errorListener);
 	}
 
 	@Override

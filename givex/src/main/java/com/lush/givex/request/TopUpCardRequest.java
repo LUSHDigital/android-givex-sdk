@@ -11,9 +11,9 @@ import com.lush.givex.model.response.TopUpCardResponse;
  */
 public class TopUpCardRequest extends BaseGivexRequest<TopUpCardResponse>
 {
-	public TopUpCardRequest(BasicRequestData data, Environment environment, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
+	public TopUpCardRequest(BasicRequestData data, String baseUrl, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		super(Method.POST, data, environment, listener, errorListener);
+		super(Method.POST, data, baseUrl, listener, errorListener);
 	}
 
 	@Override

@@ -11,9 +11,9 @@ import com.lush.givex.model.response.CancelTransactionResponse;
  */
 public class CancelTransactionRequest extends BaseGivexRequest<CancelTransactionResponse>
 {
-	public CancelTransactionRequest(BasicRequestData data, Environment environment, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
+	public CancelTransactionRequest(BasicRequestData data, String baseUrl, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener)
 	{
-		super(Method.POST, data, environment, listener, errorListener);
+		super(Method.POST, data, baseUrl, listener, errorListener);
 	}
 
 	@Override
