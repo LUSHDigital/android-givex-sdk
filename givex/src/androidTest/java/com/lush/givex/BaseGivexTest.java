@@ -32,6 +32,6 @@ public abstract class BaseGivexTest
 	@Before
 	public void setUp() throws Exception
 	{
-		givex = new Givex(InstrumentationRegistry.getTargetContext(), "INSERT_USER_HERE", "INSERT_PASSWORD_HERE", Environment.TEST, "en");
+		givex = new Givex(InstrumentationRegistry.getTargetContext(), "INSERT_USER_HERE", "INSERT_PASSWORD_HERE", "https://dev-dataconnect.givex.com", "en");
 	}
 }
