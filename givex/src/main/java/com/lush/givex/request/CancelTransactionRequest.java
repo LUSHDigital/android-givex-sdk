@@ -1,7 +1,6 @@
 package com.lush.givex.request;
 
 import com.android.volley.Response;
-import com.lush.givex.Environment;
 import com.lush.givex.base.BaseGivexRequest;
 import com.lush.givex.model.request.BasicRequestData;
 import com.lush.givex.model.response.CancelTransactionResponse;
