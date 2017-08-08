@@ -32,11 +32,6 @@ public class Givex
 	private RequestQueue queue;
 	private String username, password, languageCode, baseUrl;
 
-	public Givex(Context context, String username, String password, String languageCode)
-	{
-		this(context, username, password, Environment.PROD, languageCode);
-	}
-
 	public Givex(Context context, String username, String password, String baseUrl, String languageCode)
 	{
 		this.queue = Volley.newRequestQueue(context);

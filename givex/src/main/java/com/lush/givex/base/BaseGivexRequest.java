@@ -9,7 +9,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 
 import com.android.volley.VolleyError;
-import com.lush.givex.Environment;
 import com.lush.givex.model.request.BasicRequestData;
 
 import java.io.UnsupportedEncodingException;
@@ -32,7 +31,6 @@ public abstract class BaseGivexRequest<T> extends Request<T>
 		super(method, null, errorListener);
 		setRetryPolicy(new DefaultRetryPolicy(5000, 2, 1.5f));
 		this.listener = listener;
-		this.environment = environment;
 		this.data = data;
 		this.baseUrl = baseUrl;
 	}
