@@ -106,5 +106,11 @@ public abstract class BaseGivexRequest<T> extends Request<T>
 		else return null;
 	}
 
+	@Override
+	public Object getTag()
+	{
+		return "givex";
+	}
+
 	protected abstract T createResponse(String networkResponse);
 }
