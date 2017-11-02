@@ -41,6 +41,15 @@ public class Givex
 		this.languageCode = languageCode;
 	}
 
+	public Givex(RequestQueue queue, String username, String password, String baseUrl, String languageCode)
+	{
+		this.queue = queue;
+		this.username = username;
+		this.password = password;
+		this.languageCode = languageCode;
+		this.baseUrl = baseUrl;
+	}
+
 	/**
 	 * Requests require a transaction code to be a part of the request.
 	 *
