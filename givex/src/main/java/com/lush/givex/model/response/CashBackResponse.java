@@ -7,6 +7,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
+ * Possible error codes:
+ * 0: Worked okay
+ * 1: Invalid username/password
+ *
  * @author Matt Allen
  */
 public class CashBackResponse extends GivexResponse
@@ -39,6 +43,11 @@ public class CashBackResponse extends GivexResponse
 				receiptMessage = result.get(5);
 				success = true;
 				break;
+
+			case 3:
+				transactionCode = result.get(0);
+				this.result = Integer.parseInt(result.get(1));
+				this.error = result.get(2);
 		}
 	}
 
