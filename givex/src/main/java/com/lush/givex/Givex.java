@@ -8,16 +8,19 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.lush.givex.model.request.ActivateCardRequestData;
 import com.lush.givex.model.request.CancelTransactionRequestData;
+import com.lush.givex.model.request.CashBackRequestData;
 import com.lush.givex.model.request.GetBalanceRequestData;
 import com.lush.givex.model.request.RedemptionRequestData;
 import com.lush.givex.model.request.TopUpCardRequestData;
 import com.lush.givex.model.response.ActivateCardResponse;
 import com.lush.givex.model.response.CancelTransactionResponse;
+import com.lush.givex.model.response.CashBackResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
 import com.lush.givex.model.response.RedemptionResponse;
 import com.lush.givex.model.response.TopUpCardResponse;
 import com.lush.givex.request.ActivateCardRequest;
 import com.lush.givex.request.CancelTransactionRequest;
+import com.lush.givex.request.CashBackRequest;
 import com.lush.givex.request.GetBalanceRequest;
 import com.lush.givex.request.RedemptionRequest;
 import com.lush.givex.request.TopUpCardRequest;
@@ -117,6 +120,18 @@ public class Givex
 	{
 		RedemptionRequestData data = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
 		RedemptionRequest request = new RedemptionRequest(data, baseUrl, listener, errorListener);
+		queue.add(request);
+	}
+
+	public void cashBack(String cardNumber, double amount, Response.Listener<CashBackResponse> listener, Response.ErrorListener errorListener)
+	{
+		cashBack(cardNumber, amount, createTransactionCode(), "", listener, errorListener);
+	}
+
+	public void cashBack(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<CashBackResponse> listener, Response.ErrorListener errorListener)
+	{
+		CashBackRequestData data = new CashBackRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
+		CashBackRequest request = new CashBackRequest(data, baseUrl, listener, errorListener);
 		queue.add(request);
 	}
 }
