@@ -24,9 +24,11 @@ Cancel an activation, redemption, or increment request using the `transactionRef
 ## Usage
 
 First, add the LUSH Maven repo:
-To URL to our repo is `"https://artifacts.platformserviceaccount.com/repository/maven-public/"`
+
+The URL to our repo is `"https://artifacts.platformserviceaccount.com/repository/maven-public/"`
 
 Second, add the dependency in build.gradle:
+
 `compile 'com.lush.library:givex:1.2.0'`
 
 Then just execute the appropriate method on a `Givex` instance.
