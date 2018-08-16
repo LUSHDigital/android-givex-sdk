@@ -1,7 +1,6 @@
 package com.lush.givex.request;
 
 import com.android.volley.Response;
-import com.lush.givex.Environment;
 import com.lush.givex.base.BaseGivexRequest;
 import com.lush.givex.model.request.BasicRequestData;
 import com.lush.givex.model.response.TopUpCardResponse;
@@ -11,9 +10,9 @@ import com.lush.givex.model.response.TopUpCardResponse;
  */
 public class TopUpCardRequest extends BaseGivexRequest<TopUpCardResponse>
 {
-	public TopUpCardRequest(BasicRequestData data, Environment environment, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
+	public TopUpCardRequest(BasicRequestData data, String baseUrl, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener)
 	{
-		super(Method.POST, data, environment, listener, errorListener);
+		super(Method.POST, data, baseUrl, listener, errorListener);
 	}
 
 	@Override

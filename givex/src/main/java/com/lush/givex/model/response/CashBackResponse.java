@@ -7,22 +7,19 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Possible returns:
- *
- * <ul>
- *     <li>Code 0: All good - the card total was decremented</li>
- *     <li>Code 9: Insufficient funds</li>
- * </ul>
+ * Possible error codes:
+ * 0: Worked okay
+ * 1: Invalid username/password
  *
  * @author Matt Allen
  */
-public class RedemptionResponse extends GivexResponse
+public class CashBackResponse extends GivexResponse
 {
-	private String transactionCode, transactionReference, receiptMessage, error;
-	private Date expirationDate;
-	private double remainingBalance;
-	private int result;
+	private String transactionCode, error, transactionReference, receiptMessage;
 	private boolean success = false;
+	private int result;
+	private double newBalance;
+	private Date expirationDate;
 
 	@Override
 	public void parseResult(List<String> result)
@@ -30,11 +27,11 @@ public class RedemptionResponse extends GivexResponse
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
 		switch (result.size())
 		{
-			case 13:
+			case 7:
 				transactionCode = result.get(0);
 				this.result = Integer.parseInt(result.get(1));
 				transactionReference = result.get(2);
-				remainingBalance = Double.parseDouble(result.get(3));
+				newBalance = Double.parseDouble(result.get(3));
 				try
 				{
 					expirationDate = sdf.parse(result.get(4));
@@ -47,20 +44,10 @@ public class RedemptionResponse extends GivexResponse
 				success = true;
 				break;
 
-			case 4:
-				transactionCode = result.get(0);
-				this.result = Integer.parseInt(result.get(1));
-				error = result.get(2);
-				remainingBalance = Double.parseDouble(result.get(3));
-				success = false;
-				break;
-
 			case 3:
 				transactionCode = result.get(0);
 				this.result = Integer.parseInt(result.get(1));
-				error = result.get(2);
-				success = false;
-				break;
+				this.error = result.get(2);
 		}
 	}
 
@@ -81,6 +68,11 @@ public class RedemptionResponse extends GivexResponse
 		return transactionCode;
 	}
 
+	public String getError()
+	{
+		return error;
+	}
+
 	public String getTransactionReference()
 	{
 		return transactionReference;
@@ -91,23 +83,18 @@ public class RedemptionResponse extends GivexResponse
 		return receiptMessage;
 	}
 
-	public Date getExpirationDate()
-	{
-		return expirationDate;
-	}
-
-	public double getRemainingBalance()
-	{
-		return remainingBalance;
-	}
-
 	public int getResult()
 	{
 		return result;
 	}
 
-	public String getError()
+	public double getNewBalance()
 	{
-		return error;
+		return newBalance;
+	}
+
+	public Date getExpirationDate()
+	{
+		return expirationDate;
 	}
 }

@@ -9,7 +9,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 
 import com.android.volley.VolleyError;
-import com.lush.givex.Environment;
 import com.lush.givex.model.request.BasicRequestData;
 
 import java.io.UnsupportedEncodingException;
@@ -22,33 +21,24 @@ import java.util.Map;
 public abstract class BaseGivexRequest<T> extends Request<T>
 {
 	private static final String TAG = BaseGivexRequest.class.getSimpleName();
-	private static final String BASE_URL = "https://dev-dataconnect.givex.com";
 
 	private Response.Listener<T> listener;
-	private Environment environment = Environment.PROD;
 	private BasicRequestData data;
+	private String baseUrl;
 
-	public BaseGivexRequest(int method, BasicRequestData data, Environment environment, Response.Listener<T> listener, Response.ErrorListener errorListener)
+	public BaseGivexRequest(int method, BasicRequestData data, String baseUrl, Response.Listener<T> listener, Response.ErrorListener errorListener)
 	{
 		super(method, null, errorListener);
 		setRetryPolicy(new DefaultRetryPolicy(5000, 2, 1.5f));
 		this.listener = listener;
-		this.environment = environment;
 		this.data = data;
+		this.baseUrl = baseUrl;
 	}
 
 	@Override
 	public String getUrl()
 	{
-		String url;
-		if (environment == Environment.TEST)
-		{
-			url = BASE_URL + ":50104";
-		}
-		else
-		{
-			url = BASE_URL;
-		}
+		String url = baseUrl + ":50104";
 		Log.v(TAG, url);
 		return url;
 	}
@@ -114,6 +104,12 @@ public abstract class BaseGivexRequest<T> extends Request<T>
 
 		}
 		else return null;
+	}
+
+	@Override
+	public Object getTag()
+	{
+		return "givex";
 	}
 
 	protected abstract T createResponse(String networkResponse);
