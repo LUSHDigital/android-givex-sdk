@@ -31,6 +31,7 @@ public class RedemptionResponse extends GivexResponse
 		switch (result.size())
 		{
 			case 13:
+			case 14:
 				transactionCode = result.get(0);
 				this.result = Integer.parseInt(result.get(1));
 				transactionReference = result.get(2);
