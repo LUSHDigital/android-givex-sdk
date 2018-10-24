@@ -32,6 +32,7 @@ public class GetBalanceResponse extends GivexResponse
 		switch (result.size())
 		{
 			case 18:
+			case 19:
 				transactionCode = result.get(0);
 				this.result = Integer.parseInt(result.get(1));
 				balance = Double.parseDouble(result.get(2));
