@@ -12,7 +12,6 @@ import org.junit.runner.RunWith;
 
 import java.util.concurrent.CountDownLatch;
 
-import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 import static junit.framework.Assert.fail;
 
@@ -20,21 +19,19 @@ import static junit.framework.Assert.fail;
  * @author Matt Allen
  */
 @RunWith(AndroidJUnit4.class)
-public class ActivateCardRequestTest extends BaseGivexTest
-{
+public class ActivateCardRequestTest extends BaseGivexTest {
 	private CountDownLatch latch;
 
 	@Override
-	public void setUp() throws Exception
-	{
+	public void setUp() throws Exception {
 		super.setUp();
 		latch = new CountDownLatch(1);
 	}
 
 	@Test
-	public void testActivateCardA() throws Exception
-	{
+	public void testActivateCardA() throws Exception {
 		Log.v(LOG_TAG, "Activate card A with £100");
+
 		givex.activateCard(CARD_A_NUMBER, 100.00, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
@@ -52,14 +49,16 @@ public class ActivateCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testActivateCardAWithSecurityCode() throws Exception
-	{
+	public void testActivateCardAWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Activate Card A with £100 using security code");
-		givex.activateCard(CARD_A_NUMBER, 100.00, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<ActivateCardResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).activateCard(CARD_A_NUMBER, 100.00, transactionCode, CARD_A_PIN, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
 			public void onResponse(ActivateCardResponse response)
@@ -76,13 +75,14 @@ public class ActivateCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testActivateCardB() throws Exception
-	{
+	public void testActivateCardB() throws Exception {
 		Log.v(LOG_TAG, "Activate card B with £100");
+
 		givex.activateCard(CARD_B_NUMBER, 100.00, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
@@ -100,14 +100,16 @@ public class ActivateCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testActivateCardBWithSecurityCode() throws Exception
-	{
+	public void testActivateCardBWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Activate card B with £100 using security code");
-		givex.activateCard(CARD_B_NUMBER, 100.00, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<ActivateCardResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).activateCard(CARD_B_NUMBER, 100.00, transactionCode, CARD_B_PIN, new Response.Listener<ActivateCardResponse>()
 		{
 			@Override
 			public void onResponse(ActivateCardResponse response)
@@ -124,6 +126,7 @@ public class ActivateCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 }

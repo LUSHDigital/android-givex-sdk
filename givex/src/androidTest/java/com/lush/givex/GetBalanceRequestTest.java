@@ -21,21 +21,19 @@ import static junit.framework.Assert.fail;
  * @author Matt Allen
  */
 @RunWith(AndroidJUnit4.class)
-public class GetBalanceRequestTest extends BaseGivexTest
-{
+public class GetBalanceRequestTest extends BaseGivexTest {
 	private CountDownLatch latch;
 
 	@Override @Before
-	public void setUp() throws Exception
-	{
+	public void setUp() throws Exception {
 		super.setUp();
 		latch = new CountDownLatch(1);
 	}
 
 	@Test
-	public void testGetBalanceCardA() throws Exception
-	{
+	public void testGetBalanceCardA() throws Exception {
 		Log.v(LOG_TAG, "Get balance of card A");
+
 		givex.getBalance(CARD_A_NUMBER, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
@@ -54,14 +52,16 @@ public class GetBalanceRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testGetBalanceCardAWithSecurityCode() throws Exception
-	{
+	public void testGetBalanceCardAWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Get balance of card A using security code");
-		givex.getBalance(CARD_A_NUMBER, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<GetBalanceResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).getBalance(CARD_A_NUMBER, transactionCode, CARD_A_PIN, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
 			public void onResponse(GetBalanceResponse response)
@@ -79,13 +79,14 @@ public class GetBalanceRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testGetBalanceCardB() throws Exception
-	{
+	public void testGetBalanceCardB() throws Exception {
 		Log.v(LOG_TAG, "Get balance of card B");
+
 		givex.getBalance(CARD_B_NUMBER, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
@@ -104,14 +105,16 @@ public class GetBalanceRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testGetBalanceCardBWithSecurityCode() throws Exception
-	{
+	public void testGetBalanceCardBWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Get balance of card B using security code");
-		givex.getBalance(CARD_B_NUMBER, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<GetBalanceResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).getBalance(CARD_B_NUMBER, transactionCode, CARD_B_PIN, new Response.Listener<GetBalanceResponse>()
 		{
 			@Override
 			public void onResponse(GetBalanceResponse response)
@@ -129,6 +132,7 @@ public class GetBalanceRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 }

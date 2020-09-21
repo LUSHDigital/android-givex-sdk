@@ -1,14 +1,14 @@
 package com.lush.givex.model.request;
 
+import java.text.DecimalFormat;
+
 /**
  * @author Matt Allen
  */
-public abstract class BasicRequestData
-{
-	protected String code, username, password, languageCode, transactionCode;
+public abstract class BasicRequestData {
+	protected final String code, username, password, languageCode, transactionCode;
 
-	public BasicRequestData(String endpoint, String username, String password, String languageCode, String transactionCode)
-	{
+	BasicRequestData(String endpoint, String username, String password, String languageCode, String transactionCode) {
 		this.code = endpoint;
 		this.username = username;
 		this.password = password;
@@ -16,30 +16,9 @@ public abstract class BasicRequestData
 		this.transactionCode = transactionCode;
 	}
 
-	public String getUsername()
-	{
-		return username;
-	}
-
-	public String getPassword()
-	{
-		return password;
-	}
-
-	public String getLanguageCode()
-	{
-		return languageCode;
-	}
-
-	public String getCode()
-	{
-		return code;
-	}
-
-	public String getTransactionCode()
-	{
-		return transactionCode;
-	}
-
 	public abstract String getRequestBody();
+
+	final String formatAmount(double amount) {
+		return new DecimalFormat("0.00").format(amount);
+	}
 }

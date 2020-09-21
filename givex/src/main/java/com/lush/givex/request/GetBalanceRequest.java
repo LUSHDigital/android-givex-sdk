@@ -8,18 +8,17 @@ import com.lush.givex.model.response.GetBalanceResponse;
 /**
  * @author Matt Allen
  */
-public class GetBalanceRequest extends BaseGivexRequest<GetBalanceResponse>
-{
-	public GetBalanceRequest(BasicRequestData data, String baseUrl, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener)
-	{
-		super(Method.POST, data, baseUrl, listener, errorListener);
+public final class GetBalanceRequest extends BaseGivexRequest<GetBalanceResponse> {
+
+	public GetBalanceRequest(BasicRequestData data, String baseUrl, int timeoutMillis, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener) {
+		super(Method.POST, data, baseUrl, timeoutMillis, listener, errorListener);
 	}
 
 	@Override
-	protected GetBalanceResponse createResponse(String networkResponse)
-	{
-		GetBalanceResponse response = new GetBalanceResponse();
+	protected GetBalanceResponse createResponse(String networkResponse) {
+		final GetBalanceResponse response = new GetBalanceResponse();
 		response.fromNetworkResponse(networkResponse);
+
 		return response;
 	}
 }

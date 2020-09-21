@@ -18,97 +18,87 @@ import java.util.Map;
 /**
  * @author Matt Allen
  */
-public abstract class BaseGivexRequest<T> extends Request<T>
-{
+public abstract class BaseGivexRequest<T> extends Request<T> {
 	private static final String TAG = BaseGivexRequest.class.getSimpleName();
 
-	private Response.Listener<T> listener;
-	private BasicRequestData data;
-	private String baseUrl;
+	private final Response.Listener<T> listener;
+	private final BasicRequestData data;
+	private final String baseUrl;
 
-	public BaseGivexRequest(int method, BasicRequestData data, String baseUrl, Response.Listener<T> listener, Response.ErrorListener errorListener)
-	{
+	public BaseGivexRequest(int method, BasicRequestData data, String baseUrl, int timeoutMillis, Response.Listener<T> listener, Response.ErrorListener errorListener) {
 		super(method, null, errorListener);
-		setRetryPolicy(new DefaultRetryPolicy(5000, 2, 1.5f));
+
 		this.listener = listener;
 		this.data = data;
 		this.baseUrl = baseUrl;
+
+		setRetryPolicy(new DefaultRetryPolicy(timeoutMillis, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 	}
 
 	@Override
-	public String getUrl()
-	{
-		String url = baseUrl + ":50104";
+	public String getUrl() {
+		final String url = baseUrl + ":50104";
 		Log.v(TAG, url);
+
 		return url;
 	}
 
 	@Override
-	public Map<String, String> getHeaders() throws AuthFailureError
-	{
-		Map<String, String> headers = new HashMap<>();
+	public Map<String, String> getHeaders() throws AuthFailureError {
+		final Map<String, String> headers = new HashMap<>();
 		headers.put("Content-Type", "application/json");
+
 		return headers;
 	}
 
 	@Override
-	protected Response<T> parseNetworkResponse(NetworkResponse response)
-	{
-		String json = new String(response.data);
-		if (json.trim().length() > 0)
-		{
+	protected Response<T> parseNetworkResponse(NetworkResponse response) {
+		final String json = new String(response.data);
+		if (json.trim().length() > 0) {
 			Log.v(TAG, json);
+
 			T responseObj;
-			try
-			{
+			try {
 				responseObj = createResponse(json);
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				e.printStackTrace();
 				return Response.error(new VolleyError(e.getMessage()));
 			}
 
-			if (responseObj != null)
-			{
+			if (responseObj != null) {
 				return Response.success(responseObj, getCacheEntry());
 			}
 		}
+
 		return Response.error(new VolleyError(response));
 	}
 
 	@Override
-	protected void deliverResponse(T response)
-	{
-		if (listener != null)
-		{
+	protected void deliverResponse(T response) {
+		if (listener != null) {
 			listener.onResponse(response);
 		}
 	}
 
 	@Override
-	public byte[] getBody() throws AuthFailureError
-	{
-		if (getMethod() == Method.POST)
-		{
-			String body = data.getRequestBody();
+	public byte[] getBody() throws AuthFailureError {
+		if (getMethod() == Method.POST) {
+			final String body = data.getRequestBody();
 			Log.v(TAG, body);
-			try
-			{
+
+			try {
 				return body.getBytes("UTF-8");
-			}
-			catch (UnsupportedEncodingException e)
-			{
+			} catch (UnsupportedEncodingException e) {
 				return body.getBytes();
 			}
 
+		} else {
+			return null;
 		}
-		else return null;
 	}
 
 	@Override
-	public Object getTag()
-	{
+	public Object getTag() {
 		return "givex";
 	}
 

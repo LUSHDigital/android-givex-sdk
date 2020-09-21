@@ -8,18 +8,17 @@ import com.lush.givex.model.response.CashBackResponse;
 /**
  * @author Matt Allen
  */
-public class CashBackRequest extends BaseGivexRequest<CashBackResponse>
-{
-	public CashBackRequest(BasicRequestData data, String baseUrl, Response.Listener<CashBackResponse> listener, Response.ErrorListener errorListener)
-	{
-		super(Method.POST, data, baseUrl, listener, errorListener);
+public final class CashBackRequest extends BaseGivexRequest<CashBackResponse> {
+
+	public CashBackRequest(BasicRequestData data, String baseUrl, int timeoutMillis, Response.Listener<CashBackResponse> listener, Response.ErrorListener errorListener) {
+		super(Method.POST, data, baseUrl, timeoutMillis, listener, errorListener);
 	}
 
 	@Override
-	protected CashBackResponse createResponse(String networkResponse)
-	{
-		CashBackResponse response = new CashBackResponse();
+	protected CashBackResponse createResponse(String networkResponse) {
+		final CashBackResponse response = new CashBackResponse();
 		response.fromNetworkResponse(networkResponse);
+
 		return response;
 	}
 }

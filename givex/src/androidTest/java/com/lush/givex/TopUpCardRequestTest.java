@@ -20,21 +20,19 @@ import static junit.framework.Assert.fail;
  * @author Matt Allen
  */
 @RunWith(AndroidJUnit4.class)
-public class TopUpCardRequestTest extends BaseGivexTest
-{
+public class TopUpCardRequestTest extends BaseGivexTest {
 	private CountDownLatch latch;
 
 	@Override @Before
-	public void setUp() throws Exception
-	{
+	public void setUp() throws Exception {
 		super.setUp();
 		latch = new CountDownLatch(1);
 	}
 
 	@Test
-	public void testTopUpCardA() throws Exception
-	{
+	public void testTopUpCardA() throws Exception {
 		Log.v(LOG_TAG, "Top up card A with £75");
+
 		givex.topUp(CARD_A_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -53,14 +51,16 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testTopUpCardAWithSecurityCode() throws Exception
-	{
+	public void testTopUpCardAWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Top up card A with £75 using security code");
-		givex.topUp(CARD_A_NUMBER, 75.00, givex.createTransactionCode(), CARD_A_PIN, new Response.Listener<TopUpCardResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).topUp(CARD_A_NUMBER, 75.00, transactionCode, CARD_A_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
 			public void onResponse(TopUpCardResponse response)
@@ -78,13 +78,14 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testTopUpCardB() throws Exception
-	{
+	public void testTopUpCardB() throws Exception {
 		Log.v(LOG_TAG, "Top up card B with £75");
+
 		givex.topUp(CARD_B_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -103,14 +104,16 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testTopUpCardBWithSecurityCode() throws Exception
-	{
+	public void testTopUpCardBWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Top up card B with £75 using security code");
-		givex.topUp(CARD_B_NUMBER, 75.00, givex.createTransactionCode(), CARD_B_PIN, new Response.Listener<TopUpCardResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).topUp(CARD_B_NUMBER, 75.00, transactionCode, CARD_B_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
 			public void onResponse(TopUpCardResponse response)
@@ -128,13 +131,14 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testTopUpCardC() throws Exception
-	{
+	public void testTopUpCardC() throws Exception {
 		Log.v(LOG_TAG, "Top up card C with £75");
+
 		givex.topUp(CARD_C_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -153,14 +157,16 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testTopUpCardCWithSecurityCode() throws Exception
-	{
+	public void testTopUpCardCWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Top up card C with £75 using security code");
-		givex.topUp(CARD_C_NUMBER, 75.00, givex.createTransactionCode(), CARD_C_PIN, new Response.Listener<TopUpCardResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).topUp(CARD_C_NUMBER, 75.00, transactionCode, CARD_C_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
 			public void onResponse(TopUpCardResponse response)
@@ -178,13 +184,14 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testTopUpCardD() throws Exception
-	{
+	public void testTopUpCardD() throws Exception {
 		Log.v(LOG_TAG, "Top up card D with £75");
+
 		givex.topUp(CARD_D_NUMBER, 75.00, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
@@ -203,14 +210,16 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 
 	@Test
-	public void testTopUpCardDWithSecurityCode() throws Exception
-	{
+	public void testTopUpCardDWithSecurityCode() throws Exception {
 		Log.v(LOG_TAG, "Top up card D with £75 using security code");
-		givex.topUp(CARD_D_NUMBER, 75.00, givex.createTransactionCode(), CARD_D_PIN, new Response.Listener<TopUpCardResponse>()
+
+		final String transactionCode = String.valueOf(System.currentTimeMillis());
+		((VolleyGivex)givex).topUp(CARD_D_NUMBER, 75.00, transactionCode, CARD_D_PIN, new Response.Listener<TopUpCardResponse>()
 		{
 			@Override
 			public void onResponse(TopUpCardResponse response)
@@ -228,6 +237,7 @@ public class TopUpCardRequestTest extends BaseGivexTest
 				fail();
 			}
 		});
+
 		latch.await();
 	}
 }

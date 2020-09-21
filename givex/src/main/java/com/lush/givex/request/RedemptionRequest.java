@@ -8,18 +8,17 @@ import com.lush.givex.model.response.RedemptionResponse;
 /**
  * @author Matt Allen
  */
-public class RedemptionRequest extends BaseGivexRequest<RedemptionResponse>
+public final class RedemptionRequest extends BaseGivexRequest<RedemptionResponse>
 {
-	public RedemptionRequest(BasicRequestData data, String baseUrl, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener)
-	{
-		super(Method.POST, data, baseUrl, listener, errorListener);
+	public RedemptionRequest(BasicRequestData data, String baseUrl, int timeoutMillis, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener) {
+		super(Method.POST, data, baseUrl, timeoutMillis, listener, errorListener);
 	}
 
 	@Override
-	protected RedemptionResponse createResponse(String networkResponse)
-	{
-		RedemptionResponse response = new RedemptionResponse();
+	protected RedemptionResponse createResponse(String networkResponse) {
+		final RedemptionResponse response = new RedemptionResponse();
 		response.fromNetworkResponse(networkResponse);
+
 		return response;
 	}
 }
