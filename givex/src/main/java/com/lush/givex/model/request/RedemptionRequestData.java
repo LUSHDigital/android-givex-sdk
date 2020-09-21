@@ -1,36 +1,33 @@
 package com.lush.givex.model.request;
 
-import java.text.DecimalFormat;
 
 /**
  * @author Matt Allen
  */
-public class RedemptionRequestData extends BasicRequestData
-{
-	private String cardNumber, securityCode;
-	private double amount;
+public final class RedemptionRequestData extends BasicRequestData {
+	private final String cardNumber, securityCode;
+	private final double redemptionAmount;
 
-	public RedemptionRequestData(String username, String password, String languageCode, String transactionCode, String cardNumber, double amount, String securityCode)
-	{
+	public RedemptionRequestData(String username, String password, String languageCode, String transactionCode, String cardNumber, double redemptionAmount, String securityCode) {
 		super("dc_901", username, password, languageCode, transactionCode);
-		this.amount = amount;
+
+		this.redemptionAmount = redemptionAmount;
 		this.cardNumber = cardNumber;
 		this.securityCode = securityCode;
 	}
 
 	@Override
-	public String getRequestBody()
-	{
-		String format = "{\"jsonrpc\":\"2.0\",\"id\":\"5\",\"method\":\"%s\",\"params\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"\",\"\",\"\",\"\",\"\",\"\"]}";
+	public String getRequestBody() {
+		final String format = "{\"jsonrpc\":\"2.0\",\"id\":\"5\",\"method\":\"%s\",\"params\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"\",\"\",\"\",\"\",\"\",\"\"]}";
 		return String.format(
 				format,
-				getCode(),
-				getLanguageCode(),
-				getTransactionCode(),
-				getUsername(),
-				getPassword(),
+				code,
+				languageCode,
+				transactionCode,
+				username,
+				password,
 				cardNumber,
-				new DecimalFormat("0.00").format(amount),
+				formatAmount(redemptionAmount),
 				securityCode
 		);
 	}

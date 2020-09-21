@@ -3,6 +3,9 @@ package com.lush.givex;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
@@ -10,8 +13,7 @@ import org.junit.runner.RunWith;
  * @author Matt Allen
  */
 @RunWith(AndroidJUnit4.class)
-public abstract class BaseGivexTest
-{
+public abstract class BaseGivexTest {
 	protected static final String LOG_TAG = "GivexTests";
 
 	protected static final String CARD_A_NUMBER = "603628851842001640659";
@@ -30,8 +32,9 @@ public abstract class BaseGivexTest
 	protected Givex givex;
 
 	@Before
-	public void setUp() throws Exception
-	{
-		givex = new Givex(InstrumentationRegistry.getTargetContext(), "INSERT_USER_HERE", "INSERT_PASSWORD_HERE", "https://dev-dataconnect.givex.com", "en");
+	public void setUp() throws Exception {
+		final RequestQueue queue = Volley.newRequestQueue(InstrumentationRegistry.getTargetContext());
+		final GivexConfig config = new GivexConfig("INSERT_USER_HERE", "INSERT_PASSWORD_HERE", "https://dev-dataconnect.givex.com", "https://dev1-datacnnect.gvex.com", "en", 15000);
+		givex = GivexFactory.volleyInstance(queue, config);
 	}
 }
