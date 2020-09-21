@@ -17,7 +17,10 @@ public interface Givex {
 
     void cancelTransaction(String cardNumber, double amount, String authCode, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener);
 
-    void getBalance(String cardNumber, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener);
+    /**
+     * Sends a request to obtain the balance on the Givex card with the input card number and immediately returns the transaction code used for that request.
+     */
+    String getBalance(String cardNumber, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener);
 
     void topUp(String cardNumber, double amount, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener);
 

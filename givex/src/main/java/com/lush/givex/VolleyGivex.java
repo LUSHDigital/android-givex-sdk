@@ -63,8 +63,11 @@ final class VolleyGivex implements Givex {
 	}
 
 	@Override
-	public void getBalance(String cardNumber, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener) {
-		getBalance(cardNumber, createTransactionCode(), "", listener, errorListener);
+	public String getBalance(String cardNumber, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener) {
+		final String transactionCode = createTransactionCode();
+		getBalance(cardNumber, transactionCode, "", listener, errorListener);
+
+		return transactionCode;
 	}
 
 	// This method is not private for test purposes only.
