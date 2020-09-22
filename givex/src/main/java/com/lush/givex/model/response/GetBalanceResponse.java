@@ -1,12 +1,10 @@
 package com.lush.givex.model.response;
 
-import android.util.Log;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.lush.givex.util.DateFunctions;
+
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Possible result codes:
@@ -27,9 +25,6 @@ public final class GetBalanceResponse extends GivexResponse {
 	private static final int EXPIRATION_DATE_INDEX = 4;
 	private static final int CURRENCY_CODE_INDEX = 5;
 
-	private static final String NO_EXPIRATION_DATE_VALUE = "None";
-
-	public static final int RESULT_OK = 0;
 	public static final int RESULT_NOT_ACTIVATED = 2;
 	public static final int RESULT_EXPIRED = 6;
 
@@ -72,23 +67,10 @@ public final class GetBalanceResponse extends GivexResponse {
 		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
 		balance = Double.parseDouble(resultList.get(BALANCE_AMOUNT_INDEX));
 		pointsBalance = Double.parseDouble(resultList.get(PINTS_BALANCE_INDEX));
-		expirationDate = parseDate(resultList.get(EXPIRATION_DATE_INDEX));
+		expirationDate = DateFunctions.parseDate(resultList.get(EXPIRATION_DATE_INDEX), "get-balance");
 		currencyCode = resultList.get(CURRENCY_CODE_INDEX);
 
 		success = true;
-	}
-
-	private Date parseDate(String value) {
-		if (NO_EXPIRATION_DATE_VALUE.equalsIgnoreCase(value)) {
-			return null;
-		}
-
-		try {
-			return (new SimpleDateFormat("yyyy-MM-dd", Locale.US)).parse(value);
-		} catch (ParseException e) {
-			Log.e(getClass().getName(), "Unexpected date in get-balance Givex response: '" + value + "'", e);
-			return null;
-		}
 	}
 
 	@Override
