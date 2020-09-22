@@ -8,18 +8,19 @@ import java.util.List;
 /**
  * @author Matt Allen
  */
-public abstract class GivexResponse
-{
-	public void fromNetworkResponse(String response)
-	{
-		Gson gson = new Gson();
-		JsonRpc json = gson.fromJson(response, JsonRpc.class);
-		if (json.getResult() != null)
-		{
+public abstract class GivexResponse {
+
+	public static final int RESULT_OK = 0;
+
+	public void fromNetworkResponse(String response) {
+		final Gson gson = new Gson();
+		final JsonRpc json = gson.fromJson(response, JsonRpc.class);
+
+		if (json.getResult() != null) {
 			parseResult(json.getResult());
 		}
-		if (json.getError() != null)
-		{
+
+		if (json.getError() != null) {
 			parseError(json.getError());
 		}
 	}
