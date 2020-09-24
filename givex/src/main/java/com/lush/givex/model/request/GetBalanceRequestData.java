@@ -14,11 +14,11 @@ public final class GetBalanceRequestData extends BasicRequestData {
 	}
 
 	@Override
-	public String getRequestBody() {
-		final String format = "{\"jsonrpc\":\"2.0\",\"id\":\"5\",\"method\":\"%s\",\"params\":[\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"]}";
+	protected String getParamsList() {
+		final String format = "\"%s\",\"%s\",\"%s\",\"%s\",\"%s\"";
+
 		return String.format(
 				format,
-				code,
 				languageCode,
 				transactionCode,
 				username,

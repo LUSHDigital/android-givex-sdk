@@ -6,7 +6,8 @@ import java.text.DecimalFormat;
  * @author Matt Allen
  */
 public abstract class BasicRequestData {
-	protected final String code, username, password, languageCode, transactionCode;
+	private final String code;
+	protected final String username, password, languageCode, transactionCode;
 
 	BasicRequestData(String endpoint, String username, String password, String languageCode, String transactionCode) {
 		this.code = endpoint;
@@ -16,7 +17,14 @@ public abstract class BasicRequestData {
 		this.transactionCode = transactionCode;
 	}
 
-	public abstract String getRequestBody();
+	public final String getRequestBody() {
+		final String params = getParamsList();
+		final String format = "{\"jsonrpc\":\"2.0\",\"id\":\"5\",\"method\":\"%s\",\"params\":[%s]}";
+
+		return String.format(format, code, params);
+	}
+
+	protected abstract String getParamsList();
 
 	final String formatAmount(double amount) {
 		return new DecimalFormat("0.00").format(amount);
