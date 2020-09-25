@@ -15,7 +15,9 @@ import com.lush.givex.request.ReversalRequest;
  * This request handler implements the Givex request flow. For a single call a primary and a fallback
  * URL is designated. The primary URL will be tried first and in case of a timeout a Givex request
  * reversal is send to the primary URL and the request is send to the fallback URL. In case of timeout
- * of the fallback URL, a Givex request reversal is sent to the fallback URL too.
+ * of the fallback URL, a Givex request reversal is sent to the fallback URL too. All non-timeout errors
+ * are communicated straight to the caller. A timeout error in the fallback request is also communicated
+ * to the caller. Errors in reversals are not communicated to the caller.
  *
  * @param <R> the response type of the responses returned by requests handled by this handler.
  */
@@ -38,9 +40,11 @@ public final class RequestHandler<R> implements GivexTimeoutErrorListener, Respo
     }
 
     public void send(BasicRequestData data, GivexRequestFactory<R> requestFactory, Response.Listener<R> listener, Response.ErrorListener errorListener) {
-        final GivexErrorListener givexErrorListener = new GivexErrorListener(errorListener, this);
-        request = requestFactory.buildRequest(data, baseUrl, timeoutMillis, listener, givexErrorListener);
-        fallbackRequest = requestFactory.buildRequest(data, fallbackUrl, timeoutMillis, listener, givexErrorListener);
+        final GivexErrorListener requestErrorListener = new GivexErrorListener(errorListener, this, false);
+        request = requestFactory.buildRequest(data, baseUrl, timeoutMillis, listener, requestErrorListener);
+
+        final GivexErrorListener fallbackRequestErrorListener = new GivexErrorListener(errorListener, this, true);
+        fallbackRequest = requestFactory.buildRequest(data, fallbackUrl, timeoutMillis, listener, fallbackRequestErrorListener);
 
         final BasicRequestData reversalData = data.getReversalData();
         requestReversal = new ReversalRequest(reversalData, baseUrl, this, this);
@@ -55,6 +59,7 @@ public final class RequestHandler<R> implements GivexTimeoutErrorListener, Respo
             request = null;
             queue.add(requestReversal);
             queue.add(fallbackRequest);
+            Log.d(getClass().getName(), "Primary request timed out.");
         } else {
             fallbackRequest = null;
             queue.add(fallbackRequestReversal);
@@ -68,10 +73,10 @@ public final class RequestHandler<R> implements GivexTimeoutErrorListener, Respo
     public void onResponse(ReversalResponse response) {
         if (requestReversal != null) {
             requestReversal = null;
-            Log.d(getClass().getName(), "Reversal of primary request succeeded.");
+            Log.d(getClass().getName(), "Primary request reversed.");
         } else {
             fallbackRequestReversal = null;
-            Log.d(getClass().getName(), "Reversal of fallback request succeeded.");
+            Log.d(getClass().getName(), "Fallback request reversed.");
         }
     }
 
