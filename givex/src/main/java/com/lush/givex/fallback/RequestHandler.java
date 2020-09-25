@@ -1,5 +1,7 @@
 package com.lush.givex.fallback;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -9,6 +11,14 @@ import com.lush.givex.model.request.BasicRequestData;
 import com.lush.givex.model.response.ReversalResponse;
 import com.lush.givex.request.ReversalRequest;
 
+/**
+ * This request handler implements the Givex request flow. For a single call a primary and a fallback
+ * URL is designated. The primary URL will be tried first and in case of a timeout a Givex request
+ * reversal is send to the primary URL and the request is send to the fallback URL. In case of timeout
+ * of the fallback URL, a Givex request reversal is sent to the fallback URL too.
+ *
+ * @param <R> the response type of the responses returned by requests handled by this handler.
+ */
 public final class RequestHandler<R> implements GivexTimeoutErrorListener, Response.Listener<ReversalResponse>, Response.ErrorListener {
     private final RequestQueue queue;
     private final int timeoutMillis;
@@ -58,10 +68,10 @@ public final class RequestHandler<R> implements GivexTimeoutErrorListener, Respo
     public void onResponse(ReversalResponse response) {
         if (requestReversal != null) {
             requestReversal = null;
-            //TODO Log main reversal success
+            Log.d(getClass().getName(), "Reversal of primary request succeeded.");
         } else {
             fallbackRequestReversal = null;
-            //TODO Log fallback reversal success
+            Log.d(getClass().getName(), "Reversal of fallback request succeeded.");
         }
     }
 
@@ -72,10 +82,10 @@ public final class RequestHandler<R> implements GivexTimeoutErrorListener, Respo
     public void onErrorResponse(VolleyError error) {
         if (requestReversal != null) {
             requestReversal = null;
-            //TODO Log main reversal error
+            Log.e(getClass().getName(), "Reversal of primary request failed.", error);
         } else {
             fallbackRequestReversal = null;
-            //TODO Log fallback reversal error
+            Log.e(getClass().getName(), "Reversal of fallback request failed.", error);
         }
     }
 }
