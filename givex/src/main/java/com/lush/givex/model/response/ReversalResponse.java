@@ -7,12 +7,8 @@ public final class ReversalResponse extends GivexResponse {
 	private static final int RESULT_CODE_INDEX = 1;
 	private static final int ERROR_MSG_INDEX = 2;
 
-	private String transactionCode, error;
-	private int result;
-	private boolean success = false;
-
 	@Override
-	public void parseResult(List<String> result) {
+	protected void parseResult(List<String> result) {
 		if (result.size() <= RESULT_CODE_INDEX) {
 			error = "Unexpected result list size in Givex reversal response: " + result.size();
 		} else {
@@ -40,22 +36,5 @@ public final class ReversalResponse extends GivexResponse {
 	}
 
 	@Override
-	public void parseError(List<String> error) {}
-
-	@Override
-	public boolean isSuccess() {
-		return success;
-	}
-
-	public String getTransactionCode() {
-		return transactionCode;
-	}
-
-	public String getError() {
-		return error;
-	}
-
-	public int getResult() {
-		return result;
-	}
+	protected void parseError(List<String> error) {}
 }

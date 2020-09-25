@@ -8,11 +8,16 @@ import java.util.List;
 /**
  * @author Matt Allen
  */
-public abstract class GivexResponse {
+abstract class GivexResponse {
 
 	public static final int RESULT_OK = 0;
 
-	public void fromNetworkResponse(String response) {
+	protected String transactionCode, error;
+	protected int result;
+
+	protected boolean success;
+
+	public final void fromNetworkResponse(String response) {
 		final Gson gson = new Gson();
 		final JsonRpc json = gson.fromJson(response, JsonRpc.class);
 
@@ -25,7 +30,22 @@ public abstract class GivexResponse {
 		}
 	}
 
-	public abstract void parseResult(List<String> result);
-	public abstract void parseError(List<String> error);
-	public abstract boolean isSuccess();
+	protected abstract void parseResult(List<String> result);
+	protected abstract void parseError(List<String> error);
+
+	public final String getTransactionCode() {
+		return transactionCode;
+	}
+
+	public final String getError() {
+		return error;
+	}
+
+	public final int getResult() {
+		return result;
+	}
+
+	public final boolean isSuccess() {
+		return success;
+	}
 }

@@ -25,14 +25,12 @@ public final class RedemptionResponse extends GivexResponse {
 
 	public static final int RESULT_INSUFFICIENT_FUNDS = 9;
 
-	private String transactionCode, transactionReference, receiptMessage, error;
+	private String transactionReference, receiptMessage;
 	private Date expirationDate;
 	private double remainingBalance;
-	private int result;
-	private boolean success = false;
 
 	@Override
-	public void parseResult(List<String> result) {
+	protected void parseResult(List<String> result) {
 		switch (result.size()) {
 			case 3:
 				parseBasicErrorResult(result);
@@ -79,16 +77,7 @@ public final class RedemptionResponse extends GivexResponse {
 	}
 
 	@Override
-	public void parseError(List<String> error) {}
-
-	@Override
-	public boolean isSuccess() {
-		return success;
-	}
-
-	public String getTransactionCode() {
-		return transactionCode;
-	}
+	protected void parseError(List<String> error) {}
 
 	public String getTransactionReference() {
 		return transactionReference;
@@ -104,14 +93,6 @@ public final class RedemptionResponse extends GivexResponse {
 
 	public double getRemainingBalance() {
 		return remainingBalance;
-	}
-
-	public int getResult() {
-		return result;
-	}
-
-	public String getError() {
-		return error;
 	}
 
 	public boolean hasInsufficientFunds() {

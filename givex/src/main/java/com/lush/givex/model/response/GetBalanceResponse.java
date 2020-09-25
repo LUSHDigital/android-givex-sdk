@@ -28,14 +28,12 @@ public final class GetBalanceResponse extends GivexResponse {
 	public static final int RESULT_NOT_ACTIVATED = 2;
 	public static final int RESULT_EXPIRED = 6;
 
-	private String transactionCode, error, currencyCode;
-	private int result;
+	private String currencyCode;
 	private double balance, pointsBalance;
 	private Date expirationDate;
-	private boolean success = false;
 
 	@Override
-	public void parseResult(List<String> result) {
+	protected void parseResult(List<String> result) {
 		switch (result.size()) {
 			case 3:
 			case 17:
@@ -74,27 +72,10 @@ public final class GetBalanceResponse extends GivexResponse {
 	}
 
 	@Override
-	public void parseError(List<String> error) {}
-
-	@Override
-	public boolean isSuccess() {
-		return success;
-	}
-
-	public String getTransactionCode() {
-		return transactionCode;
-	}
-
-	public String getError() {
-		return error;
-	}
+	protected void parseError(List<String> error) {}
 
 	public String getCurrencyCode() {
 		return currencyCode;
-	}
-
-	public int getResult() {
-		return result;
 	}
 
 	public double getBalance() {

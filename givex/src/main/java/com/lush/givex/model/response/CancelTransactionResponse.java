@@ -1,10 +1,9 @@
 package com.lush.givex.model.response;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import com.lush.givex.util.DateFunctions;
+
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Known result codes:
@@ -16,33 +15,20 @@ import java.util.Locale;
  *
  * @author Matt Allen
  */
-public class CancelTransactionResponse extends GivexResponse
-{
-	private String transactionCode, transactionReference, error, receiptMessage;
-	private int result;
+public final class CancelTransactionResponse extends GivexResponse {
+	private String transactionReference, receiptMessage;
 	private double remainingBalance;
 	private Date expirationDate;
-	private boolean success = false;
 
 	@Override
-	public void parseResult(List<String> result)
-	{
+	protected void parseResult(List<String> result) {
 		transactionCode = result.get(0);
 		this.result = Integer.parseInt(result.get(1));
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-		switch (result.size())
-		{
+		switch (result.size()) {
 			case 7:
 				transactionReference = result.get(2);
 				remainingBalance = Double.parseDouble(result.get(3));
-				try
-				{
-					expirationDate = sdf.parse(result.get(4));
-				}
-				catch (ParseException e)
-				{
-					e.printStackTrace();
-				}
+				expirationDate = DateFunctions.parseDate(result.get(4), "cancel-transaction");
 				receiptMessage = result.get(5);
 				success = true;
 				break;
@@ -57,49 +43,21 @@ public class CancelTransactionResponse extends GivexResponse
 	}
 
 	@Override
-	public void parseError(List<String> error)
-	{
-		// TODO
-	}
+	protected void parseError(List<String> error) {}
 
-	@Override
-	public boolean isSuccess()
-	{
-		return success;
-	}
-
-	public String getTransactionCode()
-	{
-		return transactionCode;
-	}
-
-	public String getTransactionReference()
-	{
+	public String getTransactionReference() {
 		return transactionReference;
 	}
 
-	public String getError()
-	{
-		return error;
-	}
-
-	public String getReceiptMessage()
-	{
+	public String getReceiptMessage() {
 		return receiptMessage;
 	}
 
-	public int getResult()
-	{
-		return result;
-	}
-
-	public double getRemainingBalance()
-	{
+	public double getRemainingBalance() {
 		return remainingBalance;
 	}
 
-	public Date getExpirationDate()
-	{
+	public Date getExpirationDate() {
 		return expirationDate;
 	}
 }
