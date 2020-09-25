@@ -26,4 +26,9 @@ public final class GetBalanceRequestData extends BasicRequestData {
 				securityCode
 		);
 	}
+
+	@Override
+	public ReversalRequestData getReversalData() {
+		return null; // Reversals do not apply for balance requests.
+	}
 }

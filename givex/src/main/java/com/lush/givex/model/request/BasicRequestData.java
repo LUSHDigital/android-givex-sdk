@@ -26,6 +26,11 @@ public abstract class BasicRequestData {
 
 	protected abstract String getParamsList();
 
+	/**
+	 * Returns the reversal data for the request. This will be used to reverse the corresponding request in case of timeout errors.
+	 */
+	public abstract ReversalRequestData getReversalData();
+
 	final String formatAmount(double amount) {
 		return new DecimalFormat("0.00").format(amount);
 	}

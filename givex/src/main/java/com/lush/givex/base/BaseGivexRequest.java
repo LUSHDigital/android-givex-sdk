@@ -25,6 +25,10 @@ public abstract class BaseGivexRequest<T> extends Request<T> {
 	private final BasicRequestData data;
 	private final String baseUrl;
 
+	public BaseGivexRequest(int method, BasicRequestData data, String baseUrl, Response.Listener<T> listener, Response.ErrorListener errorListener) {
+		this(method, data, baseUrl, 0, listener, errorListener);
+	}
+
 	public BaseGivexRequest(int method, BasicRequestData data, String baseUrl, int timeoutMillis, Response.Listener<T> listener, Response.ErrorListener errorListener) {
 		super(method, null, errorListener);
 
@@ -32,7 +36,9 @@ public abstract class BaseGivexRequest<T> extends Request<T> {
 		this.data = data;
 		this.baseUrl = baseUrl;
 
-		setRetryPolicy(new DefaultRetryPolicy(timeoutMillis, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+		if (timeoutMillis > 0) {
+			setRetryPolicy(new DefaultRetryPolicy(timeoutMillis, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+		}
 	}
 
 	@Override

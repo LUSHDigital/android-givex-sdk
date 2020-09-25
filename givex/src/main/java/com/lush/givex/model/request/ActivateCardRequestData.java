@@ -30,4 +30,9 @@ public final class ActivateCardRequestData extends BasicRequestData {
 				securityCode
 		);
 	}
+
+	@Override
+	public ReversalRequestData getReversalData() {
+		return new ReversalRequestData(username, password, languageCode, transactionCode, cardNumber, amount);
+	}
 }

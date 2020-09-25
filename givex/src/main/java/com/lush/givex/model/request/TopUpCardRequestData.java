@@ -31,4 +31,9 @@ public final class TopUpCardRequestData extends BasicRequestData {
 				securityCode
 		);
 	}
+
+	@Override
+	public ReversalRequestData getReversalData() {
+		return new ReversalRequestData(username, password, languageCode, transactionCode, cardNumber, topUpAmount);
+	}
 }
