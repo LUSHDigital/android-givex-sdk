@@ -10,6 +10,7 @@ import com.android.volley.Response;
 
 import com.android.volley.VolleyError;
 import com.lush.givex.model.request.BasicRequestData;
+import com.lush.givex.model.response.GivexResponse;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
@@ -18,65 +19,63 @@ import java.util.Map;
 /**
  * @author Matt Allen
  */
-public abstract class BaseGivexRequest<T> extends Request<T> {
-	private static final String TAG = BaseGivexRequest.class.getSimpleName();
+public abstract class BaseGivexRequest<T extends GivexResponse> extends Request<T> {
+	private static final int GIVEX_PORT = 50104;
 
 	private final Response.Listener<T> listener;
 	private final BasicRequestData data;
-	private final String baseUrl;
+	private final Map<String, String> headers;
 
 	public BaseGivexRequest(int method, BasicRequestData data, String baseUrl, Response.Listener<T> listener, Response.ErrorListener errorListener) {
 		this(method, data, baseUrl, 0, listener, errorListener);
 	}
 
 	public BaseGivexRequest(int method, BasicRequestData data, String baseUrl, int timeoutMillis, Response.Listener<T> listener, Response.ErrorListener errorListener) {
-		super(method, null, errorListener);
+		super(method, (baseUrl + ':' + GIVEX_PORT), errorListener);
 
 		this.listener = listener;
 		this.data = data;
-		this.baseUrl = baseUrl;
+		this.headers = buildHeaders();
 
 		if (timeoutMillis > 0) {
 			setRetryPolicy(new DefaultRetryPolicy(timeoutMillis, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 		}
 	}
 
-	@Override
-	public String getUrl() {
-		final String url = baseUrl + ":50104";
-		Log.v(TAG, url);
-
-		return url;
-	}
-
-	@Override
-	public Map<String, String> getHeaders() throws AuthFailureError {
-		final Map<String, String> headers = new HashMap<>();
+	private Map<String, String> buildHeaders() {
+		final Map<String, String> headers = new HashMap<>(1);
 		headers.put("Content-Type", "application/json");
 
 		return headers;
 	}
 
 	@Override
+	public Map<String, String> getHeaders() throws AuthFailureError {
+		return headers;
+	}
+
+	@Override
 	protected Response<T> parseNetworkResponse(NetworkResponse response) {
-		final String json = new String(response.data);
-		if (json.trim().length() > 0) {
-			Log.v(TAG, json);
+		final String json = new String(response.data).trim();
 
-			T responseObj;
-			try {
-				responseObj = createResponse(json);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return Response.error(new VolleyError(e.getMessage()));
-			}
+		if (json.length() > 0) {
+			Log.d(getClass().getSimpleName(), json);
 
-			if (responseObj != null) {
-				return Response.success(responseObj, getCacheEntry());
-			}
+			return parseJsonResponse(json);
+		} else {
+			return Response.error(new VolleyError(response));
 		}
+	}
 
-		return Response.error(new VolleyError(response));
+	private Response<T> parseJsonResponse(String json) {
+		try {
+			final T responseObj = createResponse(json);
+
+			return Response.success(responseObj, getCacheEntry());
+		} catch (Exception e) {
+			Log.e(getClass().getSimpleName(), "Error in parsing the Givex JSON response.", e);
+			return Response.error(new VolleyError("Error in parsing the Givex JSON response.", e));
+		}
 	}
 
 	@Override
@@ -88,19 +87,24 @@ public abstract class BaseGivexRequest<T> extends Request<T> {
 
 	@Override
 	public byte[] getBody() throws AuthFailureError {
-		if (getMethod() == Method.POST) {
+		if (hasBody()) {
 			final String body = data.getRequestBody();
-			Log.v(TAG, body);
+			Log.d(getClass().getSimpleName(), body);
 
 			try {
 				return body.getBytes("UTF-8");
 			} catch (UnsupportedEncodingException e) {
 				return body.getBytes();
 			}
-
 		} else {
 			return null;
 		}
+	}
+
+	private boolean hasBody() {
+		final int method = getMethod();
+
+		return (method == Method.POST || method == Method.PUT || method == Method.PATCH);
 	}
 
 	@Override
@@ -108,5 +112,12 @@ public abstract class BaseGivexRequest<T> extends Request<T> {
 		return "givex";
 	}
 
-	protected abstract T createResponse(String networkResponse);
+	private T createResponse(String networkResponse) {
+		final T response = responseInstance();
+		response.fromNetworkResponse(networkResponse);
+
+		return response;
+	}
+
+	protected abstract T responseInstance();
 }

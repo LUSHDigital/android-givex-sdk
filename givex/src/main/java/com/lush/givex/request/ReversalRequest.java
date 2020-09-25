@@ -12,10 +12,7 @@ public final class ReversalRequest extends BaseGivexRequest<ReversalResponse> {
 	}
 
 	@Override
-	protected ReversalResponse createResponse(String networkResponse) {
-		final ReversalResponse response = new ReversalResponse();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
+	protected ReversalResponse responseInstance() {
+		return new ReversalResponse();
 	}
 }

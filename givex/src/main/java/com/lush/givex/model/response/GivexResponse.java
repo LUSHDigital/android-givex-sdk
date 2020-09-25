@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * @author Matt Allen
  */
-abstract class GivexResponse {
+public abstract class GivexResponse {
 
 	public static final int RESULT_OK = 0;
 

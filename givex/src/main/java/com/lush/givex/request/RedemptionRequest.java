@@ -15,10 +15,7 @@ public final class RedemptionRequest extends BaseGivexRequest<RedemptionResponse
 	}
 
 	@Override
-	protected RedemptionResponse createResponse(String networkResponse) {
-		final RedemptionResponse response = new RedemptionResponse();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
+	protected RedemptionResponse responseInstance() {
+		return new RedemptionResponse();
 	}
 }

@@ -15,10 +15,7 @@ public final class CashBackRequest extends BaseGivexRequest<CashBackResponse> {
 	}
 
 	@Override
-	protected CashBackResponse createResponse(String networkResponse) {
-		final CashBackResponse response = new CashBackResponse();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
+	protected CashBackResponse responseInstance() {
+		return new CashBackResponse();
 	}
 }

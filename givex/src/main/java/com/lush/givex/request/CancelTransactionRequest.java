@@ -15,10 +15,7 @@ public final class CancelTransactionRequest extends BaseGivexRequest<CancelTrans
 	}
 
 	@Override
-	protected CancelTransactionResponse createResponse(String networkResponse) {
-		final CancelTransactionResponse response = new CancelTransactionResponse();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
+	protected CancelTransactionResponse responseInstance() {
+		return new CancelTransactionResponse();
 	}
 }

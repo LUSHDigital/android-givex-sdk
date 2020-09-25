@@ -15,10 +15,7 @@ public final class TopUpCardRequest extends BaseGivexRequest<TopUpCardResponse> 
 	}
 
 	@Override
-	protected TopUpCardResponse createResponse(String networkResponse) {
-		final TopUpCardResponse response = new TopUpCardResponse();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
+	protected TopUpCardResponse responseInstance() {
+		return new TopUpCardResponse();
 	}
 }

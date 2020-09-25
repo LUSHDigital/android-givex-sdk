@@ -11,6 +11,6 @@ public final class ActivateCardRequestFactory implements GivexRequestFactory<Act
 
     @Override
     public Request<ActivateCardResponse> buildRequest(BasicRequestData data, String baseUrl, int timeoutMillis, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener) {
-        return new ActivateCardRequest(baseUrl, Request.Method.POST, data, timeoutMillis, listener, errorListener);
+        return new ActivateCardRequest(baseUrl, data, timeoutMillis, listener, errorListener);
     }
 }

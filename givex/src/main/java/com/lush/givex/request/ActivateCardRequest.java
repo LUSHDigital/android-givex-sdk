@@ -10,15 +10,12 @@ import com.lush.givex.model.response.ActivateCardResponse;
  */
 public final class ActivateCardRequest extends BaseGivexRequest<ActivateCardResponse> {
 
-	public ActivateCardRequest(String baseUrl, int method, BasicRequestData data, int timeoutMillis, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener) {
-		super(method, data, baseUrl, timeoutMillis, listener, errorListener);
+	public ActivateCardRequest(String baseUrl, BasicRequestData data, int timeoutMillis, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener) {
+		super(Method.POST, data, baseUrl, timeoutMillis, listener, errorListener);
 	}
 
 	@Override
-	protected ActivateCardResponse createResponse(String networkResponse) {
-		final ActivateCardResponse response = new ActivateCardResponse();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
+	protected ActivateCardResponse responseInstance() {
+		return new ActivateCardResponse();
 	}
 }

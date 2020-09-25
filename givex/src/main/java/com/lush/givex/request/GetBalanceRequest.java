@@ -15,10 +15,7 @@ public final class GetBalanceRequest extends BaseGivexRequest<GetBalanceResponse
 	}
 
 	@Override
-	protected GetBalanceResponse createResponse(String networkResponse) {
-		final GetBalanceResponse response = new GetBalanceResponse();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
+	protected GetBalanceResponse responseInstance() {
+		return new GetBalanceResponse();
 	}
 }
