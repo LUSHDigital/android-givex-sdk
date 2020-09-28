@@ -4,8 +4,9 @@ package com.lush.givex;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.lush.givex.fallback.GivexBackedUpRequestHandler;
 import com.lush.givex.fallback.GivexRequestFactory;
-import com.lush.givex.fallback.RequestHandler;
+import com.lush.givex.fallback.impl.GivexBackedUpRequestHandlerImpl;
 import com.lush.givex.model.request.ActivateCardRequestData;
 import com.lush.givex.model.request.BasicRequestData;
 import com.lush.givex.model.request.CancelTransactionRequestData;
@@ -55,7 +56,7 @@ final class VolleyGivex implements Givex {
 	// This method is not private for test purposes only.
 	void activateCard(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode, amount, cardNumber, securityCode);
-		final RequestHandler<ActivateCardResponse> requestHandler = new RequestHandler<ActivateCardResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<ActivateCardResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<ActivateCardResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
 		requestHandler.send(data, activateCardRequestFactory, listener, errorListener);
 	}
 
@@ -66,7 +67,7 @@ final class VolleyGivex implements Givex {
 
 	private void cancelTransaction(String transactionCode, String cardNumber, double amount, String givexAuthCode, String securityCode, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, givexAuthCode, securityCode);
-		final RequestHandler<CancelTransactionResponse> requestHandler = new RequestHandler<CancelTransactionResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<CancelTransactionResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<CancelTransactionResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
 		requestHandler.send(data, cancelTransactionRequestFactory, listener, errorListener);
 	}
 
@@ -93,7 +94,7 @@ final class VolleyGivex implements Givex {
 	// This method is not private for test purposes only.
 	void topUp(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		final RequestHandler<TopUpCardResponse> requestHandler = new RequestHandler<TopUpCardResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<TopUpCardResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<TopUpCardResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
 		requestHandler.send(data, topUpCardRequestFactory, listener, errorListener);
 	}
 
@@ -105,7 +106,7 @@ final class VolleyGivex implements Givex {
 	// This method is not private for test purposes only.
 	void redeem(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		final RequestHandler<RedemptionResponse> requestHandler = new RequestHandler<RedemptionResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<RedemptionResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<RedemptionResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
 		requestHandler.send(data, redemptionRequestFactory, listener, errorListener);
 	}
 
@@ -116,7 +117,7 @@ final class VolleyGivex implements Givex {
 
 	private void cashBack(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<CashBackResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new CashBackRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		final RequestHandler<CashBackResponse> requestHandler = new RequestHandler<CashBackResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<CashBackResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<CashBackResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
 		requestHandler.send(data, cashBackRequestFactory, listener, errorListener);
 	}
 

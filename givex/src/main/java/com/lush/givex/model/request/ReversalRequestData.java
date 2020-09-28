@@ -30,4 +30,9 @@ public final class ReversalRequestData extends BasicRequestData {
 	public ReversalRequestData getReversalData() {
 		return null; // There is no reversal for reversals.
 	}
+
+	@Override
+	public String name() {
+		return "reversal";
+	}
 }

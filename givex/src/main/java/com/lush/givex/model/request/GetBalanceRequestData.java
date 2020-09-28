@@ -31,4 +31,9 @@ public final class GetBalanceRequestData extends BasicRequestData {
 	public ReversalRequestData getReversalData() {
 		return null; // Reversals do not apply for balance requests.
 	}
+
+	@Override
+	public String name() {
+		return "get-balance";
+	}
 }
