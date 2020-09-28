@@ -5,12 +5,12 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.lush.givex.fallback.GivexTimeoutErrorListener;
 
-public final class GivexErrorListener implements Response.ErrorListener {
+final class GivexErrorListener implements Response.ErrorListener {
     private final Response.ErrorListener errorListener;
     private final GivexTimeoutErrorListener timeoutErrorListener;
     private final boolean propagateTimeoutError;
 
-    public GivexErrorListener(Response.ErrorListener errorListener, GivexTimeoutErrorListener timeoutErrorListener, boolean propagateTimeoutError) {
+    GivexErrorListener(Response.ErrorListener errorListener, GivexTimeoutErrorListener timeoutErrorListener, boolean propagateTimeoutError) {
         this.errorListener = errorListener;
         this.timeoutErrorListener = timeoutErrorListener;
         this.propagateTimeoutError = propagateTimeoutError;
