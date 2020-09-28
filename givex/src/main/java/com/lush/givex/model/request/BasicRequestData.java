@@ -31,6 +31,11 @@ public abstract class BasicRequestData {
 	 */
 	public abstract ReversalRequestData getReversalData();
 
+	/**
+	 * Returns the request name to be used in log messages.
+	 */
+	public abstract String name();
+
 	final String formatAmount(double amount) {
 		return new DecimalFormat("0.00").format(amount);
 	}

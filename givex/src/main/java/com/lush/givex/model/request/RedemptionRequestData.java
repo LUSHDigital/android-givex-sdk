@@ -35,4 +35,9 @@ public final class RedemptionRequestData extends BasicRequestData {
 	public ReversalRequestData getReversalData() {
 		return new ReversalRequestData(username, password, languageCode, transactionCode, cardNumber, redemptionAmount);
 	}
+
+	@Override
+	public String name() {
+		return "redemption";
+	}
 }

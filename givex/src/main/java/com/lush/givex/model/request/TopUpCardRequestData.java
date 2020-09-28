@@ -1,6 +1,5 @@
 package com.lush.givex.model.request;
 
-import java.text.DecimalFormat;
 
 /**
  * @author Matt Allen
@@ -35,5 +34,10 @@ public final class TopUpCardRequestData extends BasicRequestData {
 	@Override
 	public ReversalRequestData getReversalData() {
 		return new ReversalRequestData(username, password, languageCode, transactionCode, cardNumber, topUpAmount);
+	}
+
+	@Override
+	public String name() {
+		return "top-up";
 	}
 }

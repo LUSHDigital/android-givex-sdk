@@ -35,4 +35,9 @@ public final class CashBackRequestData extends BasicRequestData {
 	public ReversalRequestData getReversalData() {
 		return new ReversalRequestData(username, password, languageCode, transactionCode, cardNumber, cashBackAmount);
 	}
+
+	@Override
+	public String name() {
+		return "cash-back";
+	}
 }
