@@ -49,7 +49,7 @@ public final class RedemptionResponse extends GivexResponse {
 	private void parseBasicErrorResult(List<String> resultList) {
 		transactionCode = resultList.get(TXN_CODE_INDEX);
 		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-		error = resultList.get(TXN_REF_INDEX);
+		error = resultList.get(ERROR_CODE_INDEX);
 	}
 
 	private void parseErrorResultWithBalance(List<String> resultList) {

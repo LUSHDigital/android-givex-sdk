@@ -49,7 +49,7 @@ public final class GetBalanceResponse extends GivexResponse {
 	private void parseErrorResult(List<String> resultList) {
 		this.transactionCode = resultList.get(TXN_CODE_INDEX);
 		this.result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-		this.error = resultList.get(BALANCE_AMOUNT_INDEX);
+		this.error = resultList.get(ERROR_CODE_INDEX);
 	}
 
 	private void parseNonErrorResult(List<String> resultList) {
