@@ -9,6 +9,7 @@ import java.util.List;
  * @author Matt Allen
  */
 public abstract class GivexResponse {
+    protected static final int ERROR_CODE_INDEX = 2;
 
 	public static final int RESULT_OK = 0;
 

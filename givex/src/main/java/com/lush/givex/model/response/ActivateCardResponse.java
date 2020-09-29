@@ -17,6 +17,8 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class ActivateCardResponse extends GivexResponse {
+	public static final int RESULT_CERTIFICATE_DOES_NOT_EXIST = 2;
+
 	private String transactionReference, receiptMessage;
 	private double balance;
 	private Date expirationDate;
@@ -42,7 +44,7 @@ public final class ActivateCardResponse extends GivexResponse {
 				break;
 
 			case 3:
-				error = result.get(2);
+				error = result.get(ERROR_CODE_INDEX);
 				break;
 
 			default:
@@ -67,5 +69,9 @@ public final class ActivateCardResponse extends GivexResponse {
 
 	public String getReceiptMessage() {
 		return receiptMessage;
+	}
+
+	public boolean doesNotExist() {
+		return result == RESULT_CERTIFICATE_DOES_NOT_EXIST;
 	}
 }

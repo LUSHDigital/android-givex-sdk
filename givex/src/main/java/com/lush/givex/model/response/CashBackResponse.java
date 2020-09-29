@@ -33,7 +33,7 @@ public final class CashBackResponse extends GivexResponse {
 			case 3:
 				transactionCode = result.get(0);
 				this.result = Integer.parseInt(result.get(1));
-				this.error = result.get(2);
+				this.error = result.get(ERROR_CODE_INDEX);
 		}
 	}
 

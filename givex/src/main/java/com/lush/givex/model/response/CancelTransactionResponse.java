@@ -34,7 +34,7 @@ public final class CancelTransactionResponse extends GivexResponse {
 				break;
 
 			case 3:
-				error = result.get(2);
+				error = result.get(ERROR_CODE_INDEX);
 				break;
 
 			default:
