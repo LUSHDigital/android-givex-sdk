@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.util.Properties;
 
 public final class GivexIntegrationTest {
+    private final int alreadyActiveCardCode = 8;
     private final String cardNumber = "603628851842001640659";
 
     private GivexTestHttpClient test;
@@ -25,6 +26,11 @@ public final class GivexIntegrationTest {
     }
 
 //    @Test
+    public void shouldNotActivateAlreadyActiveCard() throws Exception {
+        Assert.assertEquals(alreadyActiveCardCode, test.activateCard(cardNumber, 7.45));
+    }
+
+//    @Test
     public void shouldGetBalance() throws Exception {
         final double balance = test.getBalance(cardNumber);
         Assert.assertTrue(balance >= 0.0);
@@ -33,5 +39,10 @@ public final class GivexIntegrationTest {
 //    @Test
     public void shouldTopUpAndReverse() throws Exception {
         Assert.assertTrue(test.topUpAndReverse(cardNumber, 14.75));
+    }
+
+//    @Test
+    public void shouldRedeemAndCancel() throws Exception {
+        Assert.assertTrue(test.redeemAndCancel(cardNumber, 5.25));
     }
 }
