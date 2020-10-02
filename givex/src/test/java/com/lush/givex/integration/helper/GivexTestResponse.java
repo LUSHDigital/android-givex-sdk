@@ -2,7 +2,7 @@ package com.lush.givex.integration.helper;
 
 import java.util.List;
 
-public final class GivexResponse {
+public final class GivexTestResponse {
     private static final int RESULT_CODE_INDEX = 1;
 
     private String jsonrpc;
