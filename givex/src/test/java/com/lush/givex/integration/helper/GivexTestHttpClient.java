@@ -7,14 +7,18 @@ import com.lush.givex.model.request.CancelTransactionRequestData;
 import com.lush.givex.model.request.GetBalanceRequestData;
 import com.lush.givex.model.request.RedemptionRequestData;
 import com.lush.givex.model.request.TopUpCardRequestData;
+import com.lush.givex.model.response.ActivateCardResponse;
+import com.lush.givex.model.response.CancelTransactionResponse;
+import com.lush.givex.model.response.GetBalanceResponse;
+import com.lush.givex.model.response.GivexResponse;
+import com.lush.givex.model.response.RedemptionResponse;
+import com.lush.givex.model.response.ReversalResponse;
+import com.lush.givex.model.response.TopUpCardResponse;
 
 import java.io.IOException;
-import java.util.List;
 
 public final class GivexTestHttpClient {
     private static final int RESULT_CODE_INDEX = 1;
-    private static final int BALANCE_AMOUNT_INDEX = 2;
-    private static final double ERROR_BALANCE_AMOUNT = -1.0;
 
     private final String username;
     private final String password;
@@ -29,78 +33,56 @@ public final class GivexTestHttpClient {
         this.languageCode = languageCode;
     }
 
-    public int activateCard(String cardNumber, double amount) throws IOException {
+    public ActivateCardResponse activateCard(String cardNumber, double amount) throws IOException {
         final BasicRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode(), amount, cardNumber, "");
-        final String activateCardJson = httpClient.post("", data.getRequestBody());
-        final GivexTestResponse activateCardResponse = gson.fromJson(activateCardJson, GivexTestResponse.class);
+        final ActivateCardResponse response = new ActivateCardResponse();
+        postRequest(data, response);
 
-        return Integer.parseInt(activateCardResponse.getResult().get(RESULT_CODE_INDEX));
+        return response;
     }
 
-    public double getBalance(String cardNumber) throws IOException  {
+    public GetBalanceResponse getBalance(String cardNumber) throws IOException  {
         final BasicRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode(), cardNumber, "");
+        final GetBalanceResponse response = new GetBalanceResponse();
+        postRequest(data, response);
 
-        final String getBalanceJson = httpClient.post("", data.getRequestBody());
-        final GivexTestResponse getBalanceResponse = gson.fromJson(getBalanceJson, GivexTestResponse.class);
-        if (getBalanceResponse.resultIsOk()) {
-            final List<String> result = getBalanceResponse.getResult();
-            if (result.size() > BALANCE_AMOUNT_INDEX) {
-                try {
-                    return Double.parseDouble(result.get(BALANCE_AMOUNT_INDEX));
-                } catch (Exception e) {
-                    System.err.println("Unexpected balance value in get-balance result: " + getBalanceJson);
-                    return ERROR_BALANCE_AMOUNT;
-                }
-            } else {
-                System.err.println("Unexpected get-balance result: " + getBalanceJson);
-                return ERROR_BALANCE_AMOUNT;
-            }
-        } else {
-            System.err.println("Get-balance error: " + getBalanceJson);
-            return ERROR_BALANCE_AMOUNT;
-        }
+        return response;
     }
 
-    public boolean topUpAndReverse(String cardNumber, double topUpAmount) throws IOException  {
-        final BasicRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode(), cardNumber, topUpAmount, "");
+    public Pair<TopUpCardResponse, ReversalResponse> topUpAndReverse(String cardNumber, double topUpAmount) throws IOException  {
+        final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode(), cardNumber, topUpAmount, "");
+        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
 
-        final String topUpJson = httpClient.post("", data.getRequestBody());
-        final GivexTestResponse topUpResponse = gson.fromJson(topUpJson, GivexTestResponse.class);
-        if (topUpResponse.resultIsOk()) {
-            final String reversalJson = httpClient.post("", data.getReversalData().getRequestBody());
-            final GivexTestResponse reversalResponse = gson.fromJson(reversalJson, GivexTestResponse.class);
-            if (reversalResponse.resultIsOk()) {
-                return true;
-            } else {
-                System.err.println("Top-up reversal error: " + reversalJson);
-                return false;
-            }
-        } else {
-            System.err.println("Top-up error: " + topUpJson);
-            return false;
+        final BasicRequestData reversalData = topUpData.getReversalData();
+        final ReversalResponse reversalResponse = new ReversalResponse();
+
+        postRequest(topUpData, topUpResponse);
+        if (topUpResponse.isSuccess()) {
+            postRequest(reversalData, reversalResponse);
         }
+
+        return new Pair<>(topUpResponse, reversalResponse);
     }
 
-    public boolean redeemAndCancel(String cardNumber, double redemptionAmount) throws IOException {
+    public Pair<RedemptionResponse, CancelTransactionResponse> redeemAndCancel(String cardNumber, double redemptionAmount) throws IOException {
         final String transactionCode = transactionCode();
         final BasicRequestData redemptionData = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, redemptionAmount, "");
         final BasicRequestData cancellationData = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, redemptionAmount, "", "");
 
-        final String redemptionJson = httpClient.post("", redemptionData.getRequestBody());
-        final GivexTestResponse redemptionResponse = gson.fromJson(redemptionJson, GivexTestResponse.class);
-        if (redemptionResponse.resultIsOk()) {
-            final String cancellationJson = httpClient.post("", cancellationData.getRequestBody());
-            final GivexTestResponse cancellationResponse = gson.fromJson(cancellationJson, GivexTestResponse.class);
-            if (cancellationResponse.resultIsOk()) {
-                return true;
-            } else {
-                System.err.println("Redemption cancellation error: " + cancellationJson);
-                return false;
-            }
-        } else {
-            System.err.println("Redemption error: " + redemptionJson);
-            return false;
+        final RedemptionResponse redemptionResponse = new RedemptionResponse();
+        final CancelTransactionResponse cancelTransactionResponse = new CancelTransactionResponse();
+
+        postRequest(redemptionData, redemptionResponse);
+        if (redemptionResponse.isSuccess()) {
+            postRequest(cancellationData, cancelTransactionResponse);
         }
+
+        return new Pair<>(redemptionResponse, cancelTransactionResponse);
+    }
+
+    private void postRequest(BasicRequestData requestData, GivexResponse responseHolder) throws IOException {
+        final String responseJson = httpClient.post("", requestData.getRequestBody());
+        responseHolder.fromNetworkResponse(responseJson);
     }
 
     private String transactionCode() {

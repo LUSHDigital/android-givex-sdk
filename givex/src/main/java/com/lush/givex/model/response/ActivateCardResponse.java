@@ -18,6 +18,7 @@ import java.util.List;
  */
 public final class ActivateCardResponse extends GivexResponse {
 	public static final int RESULT_CERTIFICATE_DOES_NOT_EXIST = 2;
+	public static final int RESULT_CARD_ALREADY_ACTIVE = 8;
 
 	private String transactionReference, receiptMessage;
 	private double balance;
@@ -73,5 +74,9 @@ public final class ActivateCardResponse extends GivexResponse {
 
 	public boolean doesNotExist() {
 		return result == RESULT_CERTIFICATE_DOES_NOT_EXIST;
+	}
+
+	public boolean alreadyActive() {
+		return result == RESULT_CARD_ALREADY_ACTIVE;
 	}
 }
