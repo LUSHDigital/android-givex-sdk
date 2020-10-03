@@ -16,22 +16,7 @@ public final class ReversalResponse extends GivexResponse {
 	}
 
 	private void parseResultList(List<String> resultList) {
-		transactionCode = resultList.get(TXN_CODE_INDEX);
-		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-
-		if (result == RESULT_OK) {
-			success = true;
-		} else  {
-			setErrorMessage(resultList);
-		}
-	}
-
-	private void setErrorMessage(List<String> resultList) {
-		if (resultList.size() > ERROR_CODE_INDEX) {
-			error = resultList.get(ERROR_CODE_INDEX);
-		} else {
-			error = "Unexpected result list size in Givex reversal error response: " + resultList.size();
-		}
+		success = true;
 	}
 
 	@Override

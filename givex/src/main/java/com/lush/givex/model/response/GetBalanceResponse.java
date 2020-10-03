@@ -18,8 +18,6 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class GetBalanceResponse extends GivexResponse {
-	private static final int TXN_CODE_INDEX = 0;
-	private static final int RESULT_CODE_INDEX = 1;
 	private static final int BALANCE_AMOUNT_INDEX = 2;
 	private static final int PINTS_BALANCE_INDEX = 3;
 	private static final int EXPIRATION_DATE_INDEX = 4;
@@ -34,41 +32,19 @@ public final class GetBalanceResponse extends GivexResponse {
 
 	@Override
 	protected void parseResult(List<String> result) {
-		switch (result.size()) {
-			case 3:
-			case 17:
-				parseErrorResult(result);
-				break;
-
-			default:
-				parseNonErrorResult(result);
-				break;
-		}
-	}
-
-	private void parseErrorResult(List<String> resultList) {
-		this.transactionCode = resultList.get(TXN_CODE_INDEX);
-		this.result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-		this.error = resultList.get(ERROR_CODE_INDEX);
-	}
-
-	private void parseNonErrorResult(List<String> resultList) {
-		if (resultList.size() > CURRENCY_CODE_INDEX) {
-			parseValidResult(resultList);
+		if (result.size() > CURRENCY_CODE_INDEX) {
+			setValues(result);
+			success = true;
 		} else {
-			this.error = "Unexpected length of 'result' array-node of the Givex get-balance response: " + resultList.size();
+			setUnexpectedLengthError("get-balance", result.size());
 		}
 	}
 
-	private void parseValidResult(List<String> resultList) {
-		transactionCode = resultList.get(TXN_CODE_INDEX);
-		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
+	private void setValues(List<String> resultList) {
 		balance = Double.parseDouble(resultList.get(BALANCE_AMOUNT_INDEX));
 		pointsBalance = Double.parseDouble(resultList.get(PINTS_BALANCE_INDEX));
 		expirationDate = DateFunctions.parseDate(resultList.get(EXPIRATION_DATE_INDEX), "get-balance");
 		currencyCode = resultList.get(CURRENCY_CODE_INDEX);
-
-		success = true;
 	}
 
 	@Override
@@ -88,6 +64,10 @@ public final class GetBalanceResponse extends GivexResponse {
 
 	public Date getExpirationDate() {
 		return expirationDate;
+	}
+
+	public boolean notActivated() {
+		return (result == RESULT_NOT_ACTIVATED);
 	}
 
 	public boolean hasExpired() {

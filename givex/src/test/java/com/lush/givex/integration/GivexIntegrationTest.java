@@ -22,7 +22,7 @@ public final class GivexIntegrationTest {
 
     private GivexTestHttpClient test;
 
-    @Before
+//    @Before
     public void setUp() throws Exception {
         final Properties props = new Properties();
         props.load(new FileReader("../local.properties"));

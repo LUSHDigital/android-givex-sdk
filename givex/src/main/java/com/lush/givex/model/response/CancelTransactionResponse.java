@@ -16,30 +16,30 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class CancelTransactionResponse extends GivexResponse {
+	private static final int RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG = 5;
+
 	private String transactionReference, receiptMessage;
 	private double remainingBalance;
 	private Date expirationDate;
 
 	@Override
 	protected void parseResult(List<String> result) {
-		transactionCode = result.get(0);
-		this.result = Integer.parseInt(result.get(1));
-		switch (result.size()) {
-			case 7:
-				transactionReference = result.get(2);
-				remainingBalance = Double.parseDouble(result.get(3));
-				expirationDate = DateFunctions.parseDate(result.get(4), "cancel-transaction");
-				receiptMessage = result.get(5);
-				success = true;
-				break;
-
-			case 3:
-				error = result.get(ERROR_CODE_INDEX);
-				break;
-
-			default:
-				break;
+		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
+			success = true;
+		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
+			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
+			success = true;
+		} else {
+			setUnexpectedLengthError("cancel-transaction", result.size());
 		}
+	}
+
+	private void setMainValues(List<String> result) {
+		transactionReference = result.get(INDEX_TXN_REF);
+		remainingBalance = Double.parseDouble(result.get(INDEX_BALANCE));
+		expirationDate = DateFunctions.parseDate(result.get(INDEX_EXPIRATION_DATE), "cancel-transaction");
 	}
 
 	@Override

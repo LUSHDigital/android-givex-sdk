@@ -13,28 +13,30 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class CashBackResponse extends GivexResponse {
+	private static final int RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG = 5;
+
 	private String transactionReference, receiptMessage;
 	private double newBalance;
 	private Date expirationDate;
 
 	@Override
 	protected void parseResult(List<String> result) {
-		switch (result.size()) {
-			case 7:
-				transactionCode = result.get(0);
-				this.result = Integer.parseInt(result.get(1));
-				transactionReference = result.get(2);
-				newBalance = Double.parseDouble(result.get(3));
-				expirationDate = DateFunctions.parseDate(result.get(4), "cashback");
-				receiptMessage = result.get(5);
-				success = true;
-				break;
-
-			case 3:
-				transactionCode = result.get(0);
-				this.result = Integer.parseInt(result.get(1));
-				this.error = result.get(ERROR_CODE_INDEX);
+		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
+			success = true;
+		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
+			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
+			success = true;
+		} else {
+			setUnexpectedLengthError("cash-back", result.size());
 		}
+	}
+
+	private void setMainValues(List<String> result) {
+		transactionReference = result.get(INDEX_TXN_REF);
+		newBalance = Double.parseDouble(result.get(INDEX_BALANCE));
+		expirationDate = DateFunctions.parseDate(result.get(INDEX_EXPIRATION_DATE), "cash-back");
 	}
 
 	@Override

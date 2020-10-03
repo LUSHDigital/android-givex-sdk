@@ -9,21 +9,30 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class TopUpCardResponse extends GivexResponse {
+	private static final int RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG = 5;
+
 	private String transactionReference, receiptMessage;
 	private double newBalance;
 	private Date expirationDate;
 
 	@Override
 	protected void parseResult(List<String> result) {
-		if (result.size() == 8) {
-			transactionCode = result.get(0);
-			this.result = Integer.parseInt(result.get(1));
-			transactionReference = result.get(2);
-			newBalance = Double.parseDouble(result.get(3));
-			expirationDate = DateFunctions.parseDate(result.get(4), "top-up-card");
-			receiptMessage = result.get(5);
+		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
 			success = true;
+		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
+			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
+			success = true;
+		} else {
+			setUnexpectedLengthError("top-up-card", result.size());
 		}
+	}
+
+	private void setMainValues(List<String> result) {
+		transactionReference = result.get(INDEX_TXN_REF);
+		newBalance = Double.parseDouble(result.get(INDEX_BALANCE));
+		expirationDate = DateFunctions.parseDate(result.get(INDEX_EXPIRATION_DATE), "top-up-card");
 	}
 
 	@Override

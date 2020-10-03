@@ -1,7 +1,8 @@
 package com.lush.givex.model.response;
 
-import junit.framework.Assert;
 
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,8 +16,6 @@ public class GetBalanceResponseTest {
         final GetBalanceResponse underTest = new GetBalanceResponse();
         underTest.parseResult(Arrays.asList(result));
 
-        Assert.assertEquals("1600769991591", underTest.getTransactionCode());
-        Assert.assertEquals(0, underTest.getResult());
         Assert.assertEquals(216.38, underTest.getBalance(), 0.0);
         Assert.assertEquals(0.0, underTest.getPointsBalance(), 0.0);
         Assert.assertNull(underTest.getExpirationDate());

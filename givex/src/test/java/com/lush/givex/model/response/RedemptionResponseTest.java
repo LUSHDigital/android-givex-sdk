@@ -1,7 +1,8 @@
 package com.lush.givex.model.response;
 
-import junit.framework.Assert;
 
+
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,8 +16,6 @@ public class RedemptionResponseTest {
         final RedemptionResponse underTest = new RedemptionResponse();
         underTest.parseResult(Arrays.asList(result));
 
-        Assert.assertEquals("1600785593225", underTest.getTransactionCode());
-        Assert.assertEquals(0, underTest.getResult());
         Assert.assertEquals("944601", underTest.getTransactionReference());
         Assert.assertEquals(75.0, underTest.getRemainingBalance(), 0.0);
         Assert.assertNull(underTest.getExpirationDate());

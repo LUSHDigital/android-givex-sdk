@@ -16,12 +16,7 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class RedemptionResponse extends GivexResponse {
-	private static final int TXN_CODE_INDEX = 0;
-	private static final int RESULT_CODE_INDEX = 1;
-	private static final int TXN_REF_INDEX = 2;
-	private static final int REMAINING_BALANCE_AMOUNT_INDEX = 3;
-	private static final int EXPIRATION_DATE_INDEX = 4;
-	private static final int RECEIPT_MESSAGE_INDEX = 5;
+	private static final int RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG = 5;
 
 	public static final int RESULT_INSUFFICIENT_FUNDS = 9;
 
@@ -31,49 +26,29 @@ public final class RedemptionResponse extends GivexResponse {
 
 	@Override
 	protected void parseResult(List<String> result) {
-		switch (result.size()) {
-			case 3:
-				parseBasicErrorResult(result);
-				break;
-
-			case 4:
-				parseErrorResultWithBalance(result);
-				break;
-
-			default:
-				parseNonErrorResult(result);
-				break;
-		}
-	}
-
-	private void parseBasicErrorResult(List<String> resultList) {
-		transactionCode = resultList.get(TXN_CODE_INDEX);
-		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-		error = resultList.get(ERROR_CODE_INDEX);
-	}
-
-	private void parseErrorResultWithBalance(List<String> resultList) {
-		parseBasicErrorResult(resultList);
-		remainingBalance = Double.parseDouble(resultList.get(REMAINING_BALANCE_AMOUNT_INDEX));
-	}
-
-	private void parseNonErrorResult(List<String> resultList) {
-		if (resultList.size() > RECEIPT_MESSAGE_INDEX) {
-			parseValidResult(resultList);
+		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
+			success = true;
+		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
+			setMainValues(result);
+			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
+			success = true;
 		} else {
-			this.error = "Unexpected length of 'result' array-node of the Givex redemption response: " + resultList.size();
+			setUnexpectedLengthError("redemption", result.size());
 		}
 	}
 
-	private void parseValidResult(List<String> resultList) {
-		transactionCode = resultList.get(TXN_CODE_INDEX);
-		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-		transactionReference = resultList.get(TXN_REF_INDEX);
-		remainingBalance = Double.parseDouble(resultList.get(REMAINING_BALANCE_AMOUNT_INDEX));
-		expirationDate = DateFunctions.parseDate(resultList.get(EXPIRATION_DATE_INDEX), "redemption");
-		receiptMessage = resultList.get(RECEIPT_MESSAGE_INDEX);
+	private void setMainValues(List<String> resultList) {
+		transactionReference = resultList.get(INDEX_TXN_REF);
+		remainingBalance = Double.parseDouble(resultList.get(INDEX_BALANCE));
+		expirationDate = DateFunctions.parseDate(resultList.get(INDEX_EXPIRATION_DATE), "redemption");
+	}
 
-		success = true;
+	@Override
+	protected final void parseAdditionalErrorData(List<String> result) {
+		if (result.size() >= INDEX_BALANCE) {
+			remainingBalance = Double.parseDouble(result.get(INDEX_BALANCE));
+		}
 	}
 
 	@Override
