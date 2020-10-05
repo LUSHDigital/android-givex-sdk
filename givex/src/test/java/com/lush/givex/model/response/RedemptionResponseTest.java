@@ -20,7 +20,6 @@ public class RedemptionResponseTest {
         Assert.assertEquals(75.0, underTest.getRemainingBalance(), 0.0);
         Assert.assertNull(underTest.getExpirationDate());
         Assert.assertEquals("", underTest.getReceiptMessage());
-        Assert.assertTrue(underTest.isSuccess());
         Assert.assertFalse(underTest.hasInsufficientFunds());
     }
 }

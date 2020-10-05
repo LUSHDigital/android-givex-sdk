@@ -41,6 +41,7 @@ public abstract class GivexResponse implements ResultConstants {
 
 				case RESULT_OK:
 					parseResult(resultList);
+					success = true;
 					break;
 
 				default:

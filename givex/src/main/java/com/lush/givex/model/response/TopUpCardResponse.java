@@ -19,11 +19,9 @@ public final class TopUpCardResponse extends GivexResponse {
 	protected void parseResult(List<String> result) {
 		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
 			setMainValues(result);
-			success = true;
 		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
 			setMainValues(result);
 			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
-			success = true;
 		} else {
 			setUnexpectedLengthError("top-up-card", result.size());
 		}

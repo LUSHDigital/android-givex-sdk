@@ -34,7 +34,6 @@ public final class GetBalanceResponse extends GivexResponse {
 	protected void parseResult(List<String> result) {
 		if (result.size() > CURRENCY_CODE_INDEX) {
 			setValues(result);
-			success = true;
 		} else {
 			setUnexpectedLengthError("get-balance", result.size());
 		}

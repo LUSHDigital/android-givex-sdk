@@ -21,6 +21,5 @@ public class GetBalanceResponseTest {
         Assert.assertNull(underTest.getExpirationDate());
         Assert.assertEquals("GBP", underTest.getCurrencyCode());
         Assert.assertFalse(underTest.hasExpired());
-        Assert.assertTrue(underTest.isSuccess());
     }
 }
