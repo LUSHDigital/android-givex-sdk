@@ -56,18 +56,22 @@ public final class RedemptionResponse extends GivexResponse {
 		return transactionReference;
 	}
 
+	@Deprecated()
 	public String getReceiptMessage() {
 		return receiptMessage;
 	}
 
+	@Deprecated()
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
 
+	@Deprecated()
 	public double getRemainingBalance() {
 		return remainingBalance;
 	}
 
+	@Deprecated()
 	public boolean hasInsufficientFunds() {
 		return (result == RESULT_INSUFFICIENT_FUNDS);
 	}

@@ -40,6 +40,7 @@ public final class TopUpCardResponse extends GivexResponse {
 		return transactionReference;
 	}
 
+	@Deprecated()
 	public String getReceiptMessage() {
 		return receiptMessage;
 	}
@@ -48,6 +49,7 @@ public final class TopUpCardResponse extends GivexResponse {
 		return newBalance;
 	}
 
+	@Deprecated()
 	public Date getExpirationDate() {
 		return expirationDate;
 	}

@@ -47,6 +47,7 @@ public final class CancelTransactionResponse extends GivexResponse {
 		return transactionReference;
 	}
 
+	@Deprecated()
 	public String getReceiptMessage() {
 		return receiptMessage;
 	}

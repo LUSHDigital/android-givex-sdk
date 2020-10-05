@@ -40,18 +40,22 @@ public final class CashBackResponse extends GivexResponse {
 	@Override
 	protected void parseError(List<String> error) {}
 
+	@Deprecated()
 	public String getTransactionReference() {
 		return transactionReference;
 	}
 
+	@Deprecated()
 	public String getReceiptMessage() {
 		return receiptMessage;
 	}
 
+	@Deprecated()
 	public double getNewBalance() {
 		return newBalance;
 	}
 
+	@Deprecated()
 	public Date getExpirationDate() {
 		return expirationDate;
 	}

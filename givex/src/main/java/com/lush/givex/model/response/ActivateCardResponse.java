@@ -47,18 +47,22 @@ public final class ActivateCardResponse extends GivexResponse {
 	@Override
 	protected void parseError(List<String> error) {}
 
+	@Deprecated()
 	public double getBalance() {
 		return balance;
 	}
 
+	@Deprecated()
 	public Date getExpirationDate() {
 		return expirationDate;
 	}
 
+	@Deprecated()
 	public String getTransactionReference() {
 		return transactionReference;
 	}
 
+	@Deprecated()
 	public String getReceiptMessage() {
 		return receiptMessage;
 	}
@@ -67,6 +71,7 @@ public final class ActivateCardResponse extends GivexResponse {
 		return result == RESULT_CERTIFICATE_DOES_NOT_EXIST;
 	}
 
+	@Deprecated()
 	public boolean alreadyActive() {
 		return result == RESULT_CARD_ALREADY_ACTIVE;
 	}

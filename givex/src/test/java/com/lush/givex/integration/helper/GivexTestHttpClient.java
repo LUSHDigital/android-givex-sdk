@@ -64,35 +64,51 @@ public final class GivexTestHttpClient {
         return new Pair<>(topUpResponse, reversalResponse);
     }
 
-    public Pair<RedemptionResponse, CancelTransactionResponse> redeemAndCancel(String cardNumber, double redemptionAmount) throws IOException {
-        final String transactionCode = transactionCode();
-        final BasicRequestData redemptionData = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, redemptionAmount, "");
-        final BasicRequestData cancellationData = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, redemptionAmount, "", "");
+    public Pair<TopUpCardResponse, RedemptionResponse> topUpAndRedeem(String cardNumber, double redemptionAmount) throws IOException {
+        final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode(), cardNumber, redemptionAmount, "");
+        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
 
+        final BasicRequestData redemptionData = new RedemptionRequestData(username, password, languageCode, transactionCode(), cardNumber, redemptionAmount, "");
         final RedemptionResponse redemptionResponse = new RedemptionResponse();
+
+        postRequest(topUpData, topUpResponse);
+        if (topUpResponse.isSuccess()) {
+            postRequest(redemptionData, redemptionResponse);
+        }
+
+        return new Pair<>(topUpResponse, redemptionResponse);
+    }
+
+    public Pair<TopUpCardResponse, CancelTransactionResponse> topUpAndCancel(String cardNumber, double topUpAmount) throws IOException {
+        final String transactionCode = transactionCode();
+
+        final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, topUpAmount, "");
+        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
+
+        final BasicRequestData cancellationData = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, topUpAmount, "", "");
         final CancelTransactionResponse cancelTransactionResponse = new CancelTransactionResponse();
 
-        postRequest(redemptionData, redemptionResponse);
-        if (redemptionResponse.isSuccess()) {
+        postRequest(topUpData, topUpResponse);
+        if (topUpResponse.isSuccess()) {
             postRequest(cancellationData, cancelTransactionResponse);
         }
 
-        return new Pair<>(redemptionResponse, cancelTransactionResponse);
+        return new Pair<>(topUpResponse, cancelTransactionResponse);
     }
 
-    public Pair<CashBackResponse, ReversalResponse> cashBackAndReverse(String cardNumber, double cashBackAmount) throws IOException  {
+    public Pair<TopUpCardResponse, CashBackResponse> topUpAndCashBack(String cardNumber, double cashBackAmount) throws IOException  {
+        final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode(), cardNumber, cashBackAmount, "");
+        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
+
         final BasicRequestData cashBackData = new CashBackRequestData(username, password, languageCode, transactionCode(), cardNumber, cashBackAmount, "");
         final CashBackResponse cashBackResponse = new CashBackResponse();
 
-        final BasicRequestData reversalData = cashBackData.getReversalData();
-        final ReversalResponse reversalResponse = new ReversalResponse();
-
-        postRequest(cashBackData, cashBackResponse);
-        if (cashBackResponse.isSuccess()) {
-            postRequest(reversalData, reversalResponse);
+        postRequest(topUpData, topUpResponse);
+        if (topUpResponse.isSuccess()) {
+            postRequest(cashBackData, cashBackResponse);
         }
 
-        return new Pair<>(cashBackResponse, reversalResponse);
+        return new Pair<>(topUpResponse, cashBackResponse);
     }
 
     private void postRequest(BasicRequestData requestData, GivexResponse responseHolder) throws IOException {

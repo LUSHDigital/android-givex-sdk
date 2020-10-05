@@ -22,7 +22,7 @@ public final class GivexIntegrationTest {
 
     private GivexTestHttpClient test;
 
-//    @Before
+    @Before
     public void setUp() throws Exception {
         final Properties props = new Properties();
         props.load(new FileReader("../local.properties"));
@@ -32,7 +32,7 @@ public final class GivexIntegrationTest {
         test = new GivexTestHttpClient(username, password, "en");
     }
 
-//    @Test
+    @Test
     public void shouldNotActivateAlreadyActiveCard() throws Exception {
         final ActivateCardResponse cardActivation = test.activateCard(cardNumber, 7.45);
         Assert.assertNotNull(cardActivation);
@@ -41,44 +41,74 @@ public final class GivexIntegrationTest {
         Assert.assertTrue(cardActivation.alreadyActive());
     }
 
-//    @Test
+    @Test
     public void shouldGetBalance() throws Exception {
         final GetBalanceResponse balance = test.getBalance(cardNumber);
         Assert.assertNotNull(balance);
         Assert.assertTrue(balance.isSuccess());
         Assert.assertTrue(balance.getBalance() >= 0.0);
+        Assert.assertNotNull(balance.getCurrencyCode());
+        Assert.assertFalse(balance.hasExpired());
     }
 
-//    @Test
+    @Test
     public void shouldTopUpAndReverse() throws Exception {
         final Pair<TopUpCardResponse, ReversalResponse> responsePair = test.topUpAndReverse(cardNumber, 14.75);
         Assert.assertNotNull(responsePair);
-        Assert.assertNotNull(responsePair.first);
-        Assert.assertNotNull(responsePair.second);
 
-        Assert.assertTrue(responsePair.first.isSuccess());
-        Assert.assertTrue(responsePair.second.isSuccess());
+        final TopUpCardResponse topUp = responsePair.first;
+        Assert.assertNotNull(topUp);
+        Assert.assertTrue(topUp.isSuccess());
+        Assert.assertNotNull(topUp.getTransactionReference());
+        Assert.assertTrue(topUp.getNewBalance() >= 0.0);
+
+        final ReversalResponse reversal = responsePair.second;
+        Assert.assertNotNull(reversal);
+        Assert.assertTrue(reversal.isSuccess());
     }
 
-//    @Test
-    public void shouldRedeemAndCancel() throws Exception {
-        final Pair<RedemptionResponse, CancelTransactionResponse> responsePair = test.redeemAndCancel(cardNumber, 5.25);
+    @Test
+    public void shouldTopUpAndRedeem() throws Exception {
+        final Pair<TopUpCardResponse, RedemptionResponse> responsePair = test.topUpAndRedeem(cardNumber, 5.25);
         Assert.assertNotNull(responsePair);
-        Assert.assertNotNull(responsePair.first);
-        Assert.assertNotNull(responsePair.second);
 
-        Assert.assertTrue(responsePair.first.isSuccess());
-        Assert.assertTrue(responsePair.second.isSuccess());
+        final TopUpCardResponse topUp = responsePair.first;
+        Assert.assertNotNull(topUp);
+        Assert.assertTrue(topUp.isSuccess());
+
+        final RedemptionResponse redemption = responsePair.second;
+        Assert.assertNotNull(redemption);
+        Assert.assertTrue(redemption.isSuccess());
+        Assert.assertNotNull(redemption.getTransactionReference());
     }
 
-//    @Test
-    public void shouldCashBackAndReverse() throws Exception {
-        final Pair<CashBackResponse, ReversalResponse> responsePair = test.cashBackAndReverse(cardNumber, 14.75);
+    @Test
+    public void shouldTopUpAndCancel() throws Exception {
+        final Pair<TopUpCardResponse, CancelTransactionResponse> responsePair = test.topUpAndCancel(cardNumber, 7.55);
         Assert.assertNotNull(responsePair);
-        Assert.assertNotNull(responsePair.first);
-        Assert.assertNotNull(responsePair.second);
 
-        Assert.assertTrue(responsePair.first.isSuccess());
-        Assert.assertTrue(responsePair.second.isSuccess());
+        final TopUpCardResponse topUp = responsePair.first;
+        Assert.assertNotNull(topUp);
+        Assert.assertTrue(topUp.isSuccess());
+
+        final CancelTransactionResponse cancellation = responsePair.second;
+        Assert.assertNotNull(cancellation);
+        Assert.assertTrue(cancellation.isSuccess());
+        Assert.assertNotNull(cancellation.getTransactionReference());
+        Assert.assertTrue(cancellation.getRemainingBalance() >= 0.0);
+    }
+
+    @Test
+    public void shouldTopUpAndCashBack() throws Exception {
+        final Pair<TopUpCardResponse, CashBackResponse> responsePair = test.topUpAndCashBack(cardNumber, 12.25);
+        Assert.assertNotNull(responsePair);
+
+        final TopUpCardResponse topUp = responsePair.first;
+        Assert.assertNotNull(topUp);
+        Assert.assertTrue(topUp.isSuccess());
+
+        final CashBackResponse cashBack = responsePair.second;
+        Assert.assertNotNull(cashBack);
+        Assert.assertTrue(cashBack.isSuccess());
     }
 }

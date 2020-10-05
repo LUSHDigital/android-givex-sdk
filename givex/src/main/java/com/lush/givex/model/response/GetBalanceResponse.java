@@ -57,6 +57,7 @@ public final class GetBalanceResponse extends GivexResponse {
 		return balance;
 	}
 
+	@Deprecated()
 	public double getPointsBalance() {
 		return pointsBalance;
 	}
