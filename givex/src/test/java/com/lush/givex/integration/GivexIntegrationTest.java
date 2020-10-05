@@ -4,6 +4,7 @@ import com.lush.givex.integration.helper.GivexTestHttpClient;
 import com.lush.givex.integration.helper.Pair;
 import com.lush.givex.model.response.ActivateCardResponse;
 import com.lush.givex.model.response.CancelTransactionResponse;
+import com.lush.givex.model.response.CashBackResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
 import com.lush.givex.model.response.RedemptionResponse;
 import com.lush.givex.model.response.ReversalResponse;
@@ -17,7 +18,6 @@ import java.io.FileReader;
 import java.util.Properties;
 
 public final class GivexIntegrationTest {
-    private final int alreadyActiveCardCode = 8;
     private final String cardNumber = "603628851842001640659";
 
     private GivexTestHttpClient test;
@@ -63,6 +63,17 @@ public final class GivexIntegrationTest {
 //    @Test
     public void shouldRedeemAndCancel() throws Exception {
         final Pair<RedemptionResponse, CancelTransactionResponse> responsePair = test.redeemAndCancel(cardNumber, 5.25);
+        Assert.assertNotNull(responsePair);
+        Assert.assertNotNull(responsePair.first);
+        Assert.assertNotNull(responsePair.second);
+
+        Assert.assertTrue(responsePair.first.isSuccess());
+        Assert.assertTrue(responsePair.second.isSuccess());
+    }
+
+//    @Test
+    public void shouldCashBackAndReverse() throws Exception {
+        final Pair<CashBackResponse, ReversalResponse> responsePair = test.cashBackAndReverse(cardNumber, 14.75);
         Assert.assertNotNull(responsePair);
         Assert.assertNotNull(responsePair.first);
         Assert.assertNotNull(responsePair.second);

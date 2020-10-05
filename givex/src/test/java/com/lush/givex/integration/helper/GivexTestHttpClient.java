@@ -4,11 +4,13 @@ import com.google.gson.Gson;
 import com.lush.givex.model.request.ActivateCardRequestData;
 import com.lush.givex.model.request.BasicRequestData;
 import com.lush.givex.model.request.CancelTransactionRequestData;
+import com.lush.givex.model.request.CashBackRequestData;
 import com.lush.givex.model.request.GetBalanceRequestData;
 import com.lush.givex.model.request.RedemptionRequestData;
 import com.lush.givex.model.request.TopUpCardRequestData;
 import com.lush.givex.model.response.ActivateCardResponse;
 import com.lush.givex.model.response.CancelTransactionResponse;
+import com.lush.givex.model.response.CashBackResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
 import com.lush.givex.model.response.GivexResponse;
 import com.lush.givex.model.response.RedemptionResponse;
@@ -18,8 +20,6 @@ import com.lush.givex.model.response.TopUpCardResponse;
 import java.io.IOException;
 
 public final class GivexTestHttpClient {
-    private static final int RESULT_CODE_INDEX = 1;
-
     private final String username;
     private final String password;
     private final String languageCode;
@@ -78,6 +78,21 @@ public final class GivexTestHttpClient {
         }
 
         return new Pair<>(redemptionResponse, cancelTransactionResponse);
+    }
+
+    public Pair<CashBackResponse, ReversalResponse> cashBackAndReverse(String cardNumber, double cashBackAmount) throws IOException  {
+        final BasicRequestData cashBackData = new CashBackRequestData(username, password, languageCode, transactionCode(), cardNumber, cashBackAmount, "");
+        final CashBackResponse cashBackResponse = new CashBackResponse();
+
+        final BasicRequestData reversalData = cashBackData.getReversalData();
+        final ReversalResponse reversalResponse = new ReversalResponse();
+
+        postRequest(cashBackData, cashBackResponse);
+        if (cashBackResponse.isSuccess()) {
+            postRequest(reversalData, reversalResponse);
+        }
+
+        return new Pair<>(cashBackResponse, reversalResponse);
     }
 
     private void postRequest(BasicRequestData requestData, GivexResponse responseHolder) throws IOException {
