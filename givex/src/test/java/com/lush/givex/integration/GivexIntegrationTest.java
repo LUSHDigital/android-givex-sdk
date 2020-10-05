@@ -22,7 +22,7 @@ public final class GivexIntegrationTest {
 
     private GivexTestHttpClient test;
 
-    @Before
+//    @Before
     public void setUp() throws Exception {
         final Properties props = new Properties();
         props.load(new FileReader("../local.properties"));
@@ -32,7 +32,7 @@ public final class GivexIntegrationTest {
         test = new GivexTestHttpClient(username, password, "en");
     }
 
-    @Test
+//    @Test
     public void shouldNotActivateAlreadyActiveCard() throws Exception {
         final ActivateCardResponse cardActivation = test.activateCard(cardNumber, 7.45);
         Assert.assertNotNull(cardActivation);
@@ -41,7 +41,7 @@ public final class GivexIntegrationTest {
         Assert.assertTrue(cardActivation.alreadyActive());
     }
 
-    @Test
+//    @Test
     public void shouldGetBalance() throws Exception {
         final GetBalanceResponse balance = test.getBalance(cardNumber);
         Assert.assertNotNull(balance);
@@ -51,7 +51,7 @@ public final class GivexIntegrationTest {
         Assert.assertFalse(balance.hasExpired());
     }
 
-    @Test
+//    @Test
     public void shouldTopUpAndReverse() throws Exception {
         final Pair<TopUpCardResponse, ReversalResponse> responsePair = test.topUpAndReverse(cardNumber, 14.75);
         Assert.assertNotNull(responsePair);
@@ -67,7 +67,7 @@ public final class GivexIntegrationTest {
         Assert.assertTrue(reversal.isSuccess());
     }
 
-    @Test
+//    @Test
     public void shouldTopUpAndRedeem() throws Exception {
         final Pair<TopUpCardResponse, RedemptionResponse> responsePair = test.topUpAndRedeem(cardNumber, 5.25);
         Assert.assertNotNull(responsePair);
@@ -82,7 +82,7 @@ public final class GivexIntegrationTest {
         Assert.assertNotNull(redemption.getTransactionReference());
     }
 
-    @Test
+//    @Test
     public void shouldTopUpAndCancel() throws Exception {
         final Pair<TopUpCardResponse, CancelTransactionResponse> responsePair = test.topUpAndCancel(cardNumber, 7.55);
         Assert.assertNotNull(responsePair);
@@ -98,7 +98,7 @@ public final class GivexIntegrationTest {
         Assert.assertTrue(cancellation.getRemainingBalance() >= 0.0);
     }
 
-    @Test
+//    @Test
     public void shouldTopUpAndCashBack() throws Exception {
         final Pair<TopUpCardResponse, CashBackResponse> responsePair = test.topUpAndCashBack(cardNumber, 12.25);
         Assert.assertNotNull(responsePair);
