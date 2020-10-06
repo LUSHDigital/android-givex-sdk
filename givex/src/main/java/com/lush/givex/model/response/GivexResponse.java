@@ -21,7 +21,7 @@ public abstract class GivexResponse implements ResultConstants {
 		final JsonRpc jsonRpc = (new Gson()).fromJson(json, JsonRpc.class);
 
 		if (jsonRpc.getResult() != null) {
-			parseCommonResult(jsonRpc.getResult());
+			parseResultNode(jsonRpc.getResult());
 		}
 
 		if (jsonRpc.getError() != null) {
@@ -29,7 +29,7 @@ public abstract class GivexResponse implements ResultConstants {
 		}
 	}
 
-	private void parseCommonResult(List<String> resultList) {
+	private void parseResultNode(List<String> resultList) {
 		if (resultList.size() < RESULT_LIST_MIN_LENGTH) {
 			error = "Unexpected result length: " + resultList.size();
 		} else {
