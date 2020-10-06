@@ -18,6 +18,10 @@ public final class RedemptionResponse extends GivexResponse {
 
 	private String transactionReference;
 
+	public RedemptionResponse(String json) {
+		super(json);
+	}
+
 	@Override
 	protected boolean parseResult(List<String> result) {
 		if (result.size() > INDEX_TXN_REF) {

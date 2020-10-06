@@ -30,6 +30,10 @@ public final class GetBalanceResponse extends GivexResponse {
 	private double balance;
 	private Date expirationDate;
 
+	public GetBalanceResponse(String json) {
+		super(json);
+	}
+
 	@Override
 	protected boolean parseResult(List<String> result) {
 		if (result.size() > CURRENCY_CODE_INDEX) {

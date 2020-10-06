@@ -12,6 +12,10 @@ import java.util.List;
  */
 public final class CashBackResponse extends GivexResponse {
 
+	public CashBackResponse(String json) {
+		super(json);
+	}
+
 	@Override
 	protected boolean parseResult(List<String> result) {
 		return true;

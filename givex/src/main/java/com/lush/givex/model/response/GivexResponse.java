@@ -17,15 +17,15 @@ public abstract class GivexResponse implements ResultConstants {
 
 	protected boolean parsingComplete;
 
-	public final void fromNetworkResponse(String response) {
-		final JsonRpc json = (new Gson()).fromJson(response, JsonRpc.class);
+	protected GivexResponse(String json) {
+		final JsonRpc jsonRpc = (new Gson()).fromJson(json, JsonRpc.class);
 
-		if (json.getResult() != null) {
-			parseCommonResult(json.getResult());
+		if (jsonRpc.getResult() != null) {
+			parseCommonResult(jsonRpc.getResult());
 		}
 
-		if (json.getError() != null) {
-			parseError(json.getError());
+		if (jsonRpc.getError() != null) {
+			parseError(jsonRpc.getError());
 		}
 	}
 

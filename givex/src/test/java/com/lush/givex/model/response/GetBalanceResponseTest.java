@@ -13,7 +13,7 @@ public class GetBalanceResponseTest {
     public void shouldParseGetBalanceResult() {
         final String[] result = {"1600769991591", "0", "216.38", "0", "None", "GBP", "", "", "", "", "603628-200164065", "", "", "GBP", "", "", "", "", "", ""};
 
-        final GetBalanceResponse underTest = new GetBalanceResponse();
+        final GetBalanceResponse underTest = new GetBalanceResponse(ResponseTestHelper.buildJson("dc_909", result));
         underTest.parseResult(Arrays.asList(result));
 
         Assert.assertEquals(216.38, underTest.getBalance(), 0.0);

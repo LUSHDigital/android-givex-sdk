@@ -25,6 +25,10 @@ public final class CancelTransactionResponse extends GivexResponse {
 	private double remainingBalance;
 	private Date expirationDate;
 
+	public CancelTransactionResponse(String json) {
+		super(json);
+	}
+
 	@Override
 	protected boolean parseResult(List<String> result) {
 		if (result.size() > INDEX_EXPIRATION_DATE) {

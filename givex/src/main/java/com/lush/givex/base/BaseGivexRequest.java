@@ -69,7 +69,7 @@ public abstract class BaseGivexRequest<T extends GivexResponse> extends Request<
 
 	private Response<T> parseJsonResponse(String json) {
 		try {
-			final T responseObj = createResponse(json);
+			final T responseObj = responseInstance(json);
 
 			return Response.success(responseObj, getCacheEntry());
 		} catch (Exception e) {
@@ -112,12 +112,5 @@ public abstract class BaseGivexRequest<T extends GivexResponse> extends Request<
 		return "givex";
 	}
 
-	private T createResponse(String networkResponse) {
-		final T response = responseInstance();
-		response.fromNetworkResponse(networkResponse);
-
-		return response;
-	}
-
-	protected abstract T responseInstance();
+	protected abstract T responseInstance(String json);
 }

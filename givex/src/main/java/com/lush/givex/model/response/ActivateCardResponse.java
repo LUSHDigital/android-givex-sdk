@@ -19,6 +19,10 @@ public final class ActivateCardResponse extends GivexResponse {
 	public static final int RESULT_CARD_ALREADY_ACTIVATED = 8;
 	public static final int RESULT_INCORRECT_AMOUNT = 12;
 
+	public ActivateCardResponse(String json) {
+		super(json);
+	}
+
 	@Override
 	protected boolean parseResult(List<String> result) {
 		return true;

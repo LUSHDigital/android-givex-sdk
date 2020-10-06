@@ -15,7 +15,7 @@ public final class TopUpCardRequest extends BaseGivexRequest<TopUpCardResponse> 
 	}
 
 	@Override
-	protected TopUpCardResponse responseInstance() {
-		return new TopUpCardResponse();
+	protected TopUpCardResponse responseInstance(String json) {
+		return new TopUpCardResponse(json);
 	}
 }

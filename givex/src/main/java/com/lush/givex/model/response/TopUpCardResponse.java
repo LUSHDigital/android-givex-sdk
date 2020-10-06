@@ -10,6 +10,10 @@ public final class TopUpCardResponse extends GivexResponse {
 	private String transactionReference;
 	private double newBalance;
 
+	public TopUpCardResponse(String json) {
+		super(json);
+	}
+
 	@Override
 	protected boolean parseResult(List<String> result) {
 		if (result.size() > INDEX_BALANCE) {

@@ -12,7 +12,6 @@ import com.lush.givex.model.response.ActivateCardResponse;
 import com.lush.givex.model.response.CancelTransactionResponse;
 import com.lush.givex.model.response.CashBackResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
-import com.lush.givex.model.response.GivexResponse;
 import com.lush.givex.model.response.RedemptionResponse;
 import com.lush.givex.model.response.ReversalResponse;
 import com.lush.givex.model.response.TopUpCardResponse;
@@ -35,85 +34,107 @@ public final class GivexTestHttpClient {
 
     public ActivateCardResponse activateCard(String cardNumber, double amount) throws IOException {
         final BasicRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode(), amount, cardNumber, "");
-        final ActivateCardResponse response = new ActivateCardResponse();
-        postRequest(data, response);
 
-        return response;
+        return postActivateCardRequest(data);
     }
 
     public GetBalanceResponse getBalance(String cardNumber) throws IOException  {
         final BasicRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode(), cardNumber, "");
-        final GetBalanceResponse response = new GetBalanceResponse();
-        postRequest(data, response);
 
-        return response;
+        return postGetBalanceRequest(data);
     }
 
     public Pair<TopUpCardResponse, ReversalResponse> topUpAndReverse(String cardNumber, double topUpAmount) throws IOException  {
         final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode(), cardNumber, topUpAmount, "");
-        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
+        final TopUpCardResponse topUpResponse = postTopUpRequest(topUpData);
 
-        final BasicRequestData reversalData = topUpData.getReversalData();
-        final ReversalResponse reversalResponse = new ReversalResponse();
-
-        postRequest(topUpData, topUpResponse);
         if (topUpResponse.isSuccess()) {
-            postRequest(reversalData, reversalResponse);
-        }
+            final BasicRequestData reversalData = topUpData.getReversalData();
+            final ReversalResponse reversalResponse = postReversalRequest(reversalData);
 
-        return new Pair<>(topUpResponse, reversalResponse);
+            return new Pair<>(topUpResponse, reversalResponse);
+        } else {
+            return new Pair<>(topUpResponse, null);
+        }
     }
 
     public Pair<TopUpCardResponse, RedemptionResponse> topUpAndRedeem(String cardNumber, double redemptionAmount) throws IOException {
         final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode(), cardNumber, redemptionAmount, "");
-        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
+        final TopUpCardResponse topUpResponse = postTopUpRequest(topUpData);
 
-        final BasicRequestData redemptionData = new RedemptionRequestData(username, password, languageCode, transactionCode(), cardNumber, redemptionAmount, "");
-        final RedemptionResponse redemptionResponse = new RedemptionResponse();
-
-        postRequest(topUpData, topUpResponse);
         if (topUpResponse.isSuccess()) {
-            postRequest(redemptionData, redemptionResponse);
-        }
+            final BasicRequestData redemptionData = new RedemptionRequestData(username, password, languageCode, transactionCode(), cardNumber, redemptionAmount, "");
+            final RedemptionResponse redemptionResponse = postRedemptionRequest(redemptionData);
 
-        return new Pair<>(topUpResponse, redemptionResponse);
+            return new Pair<>(topUpResponse, redemptionResponse);
+        } else {
+            return new Pair<>(topUpResponse, null);
+        }
     }
 
     public Pair<TopUpCardResponse, CancelTransactionResponse> topUpAndCancel(String cardNumber, double topUpAmount) throws IOException {
         final String transactionCode = transactionCode();
 
         final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, topUpAmount, "");
-        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
+        final TopUpCardResponse topUpResponse = postTopUpRequest(topUpData);
 
-        final BasicRequestData cancellationData = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, topUpAmount, "", "");
-        final CancelTransactionResponse cancelTransactionResponse = new CancelTransactionResponse();
-
-        postRequest(topUpData, topUpResponse);
         if (topUpResponse.isSuccess()) {
-            postRequest(cancellationData, cancelTransactionResponse);
-        }
+            final BasicRequestData cancellationData = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, topUpAmount, "", "");
+            final CancelTransactionResponse cancelTransactionResponse = postCancelTransactionRequest(cancellationData);
 
-        return new Pair<>(topUpResponse, cancelTransactionResponse);
+            return new Pair<>(topUpResponse, cancelTransactionResponse);
+        } else {
+            return new Pair<>(topUpResponse, null);
+        }
     }
 
     public Pair<TopUpCardResponse, CashBackResponse> topUpAndCashBack(String cardNumber, double cashBackAmount) throws IOException  {
         final BasicRequestData topUpData = new TopUpCardRequestData(username, password, languageCode, transactionCode(), cardNumber, cashBackAmount, "");
-        final TopUpCardResponse topUpResponse = new TopUpCardResponse();
+        final TopUpCardResponse topUpResponse = postTopUpRequest(topUpData);
 
-        final BasicRequestData cashBackData = new CashBackRequestData(username, password, languageCode, transactionCode(), cardNumber, cashBackAmount, "");
-        final CashBackResponse cashBackResponse = new CashBackResponse();
-
-        postRequest(topUpData, topUpResponse);
         if (topUpResponse.isSuccess()) {
-            postRequest(cashBackData, cashBackResponse);
-        }
+            final BasicRequestData cashBackData = new CashBackRequestData(username, password, languageCode, transactionCode(), cardNumber, cashBackAmount, "");
+            final CashBackResponse cashBackResponse = postCashBackRequest(cashBackData);
 
-        return new Pair<>(topUpResponse, cashBackResponse);
+            return new Pair<>(topUpResponse, cashBackResponse);
+        } else {
+            return new Pair<>(topUpResponse, null);
+        }
     }
 
-    private void postRequest(BasicRequestData requestData, GivexResponse responseHolder) throws IOException {
+    private ActivateCardResponse postActivateCardRequest(BasicRequestData requestData) throws IOException {
         final String responseJson = httpClient.post("", requestData.getRequestBody());
-        responseHolder.fromNetworkResponse(responseJson);
+        return new ActivateCardResponse(responseJson);
+    }
+
+    private CancelTransactionResponse postCancelTransactionRequest(BasicRequestData requestData) throws IOException {
+        final String responseJson = httpClient.post("", requestData.getRequestBody());
+        return new CancelTransactionResponse(responseJson);
+    }
+
+    private CashBackResponse postCashBackRequest(BasicRequestData requestData) throws IOException {
+        final String responseJson = httpClient.post("", requestData.getRequestBody());
+        return new CashBackResponse(responseJson);
+    }
+
+    private GetBalanceResponse postGetBalanceRequest(BasicRequestData requestData) throws IOException {
+        final String responseJson = httpClient.post("", requestData.getRequestBody());
+        return new GetBalanceResponse(responseJson);
+    }
+
+    private RedemptionResponse postRedemptionRequest(BasicRequestData requestData) throws IOException {
+        final String responseJson = httpClient.post("", requestData.getRequestBody());
+        return new RedemptionResponse(responseJson);
+    }
+
+    private ReversalResponse postReversalRequest(BasicRequestData requestData) throws IOException {
+        final String responseJson = httpClient.post("", requestData.getRequestBody());
+        return new ReversalResponse(responseJson);
+    }
+
+    private TopUpCardResponse postTopUpRequest(BasicRequestData requestData) throws IOException {
+        final String responseJson = httpClient.post("", requestData.getRequestBody());
+        return new TopUpCardResponse(responseJson);
     }
 
     private String transactionCode() {

@@ -13,7 +13,7 @@ public class RedemptionResponseTest {
     public void shouldParseRedemptionResponse() {
         final String[] result = {"1600785593225", "0", "944601", "75.00", "None", "", "", "", "", "603628-200164065", "", "", "", "", "None"};
 
-        final RedemptionResponse underTest = new RedemptionResponse();
+        final RedemptionResponse underTest = new RedemptionResponse(ResponseTestHelper.buildJson("dc_901", result));
         underTest.parseResult(Arrays.asList(result));
 
         Assert.assertEquals("944601", underTest.getTransactionReference());
