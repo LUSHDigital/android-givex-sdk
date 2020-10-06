@@ -12,10 +12,10 @@ public abstract class GivexResponse implements ResultConstants {
 	public static final int RESULT_OK = 0;
 	public static final int RESULT_NONE = -1;
 
-	protected String transactionCode, error;
-	protected int result = RESULT_NONE;
+	private String transactionCode, error;
+	private int result = RESULT_NONE;
 
-	protected boolean parsingComplete;
+	private boolean parsingComplete;
 
 	protected GivexResponse(String json) {
 		final JsonRpc jsonRpc = (new Gson()).fromJson(json, JsonRpc.class);

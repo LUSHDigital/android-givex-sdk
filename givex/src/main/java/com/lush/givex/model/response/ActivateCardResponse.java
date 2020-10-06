@@ -32,6 +32,6 @@ public final class ActivateCardResponse extends GivexResponse {
 	protected void parseError(List<String> error) {}
 
 	public boolean doesNotExist() {
-		return result == RESULT_CERTIFICATE_DOES_NOT_EXIST;
+		return getResult() == RESULT_CERTIFICATE_DOES_NOT_EXIST;
 	}
 }

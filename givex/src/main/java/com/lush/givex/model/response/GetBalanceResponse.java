@@ -65,6 +65,6 @@ public final class GetBalanceResponse extends GivexResponse {
 	}
 
 	public boolean hasExpired() {
-		return (result == RESULT_EXPIRED);
+		return (getResult() == RESULT_EXPIRED);
 	}
 }
