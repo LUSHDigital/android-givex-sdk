@@ -1,8 +1,6 @@
 package com.lush.givex.model.response;
 
-import com.lush.givex.util.DateFunctions;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,36 +14,18 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class RedemptionResponse extends GivexResponse {
-	private static final int RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG = 5;
-
 	public static final int RESULT_INSUFFICIENT_FUNDS = 9;
 
-	private String transactionReference, receiptMessage;
-	private Date expirationDate;
-	private double remainingBalance;
+	private String transactionReference;
 
 	@Override
-	protected void parseResult(List<String> result) {
-		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
-			setMainValues(result);
-		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
-			setMainValues(result);
-			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
+	protected boolean parseResult(List<String> result) {
+		if (result.size() > INDEX_TXN_REF) {
+			transactionReference = result.get(INDEX_TXN_REF);
+			return true;
 		} else {
 			setUnexpectedLengthError("redemption", result.size());
-		}
-	}
-
-	private void setMainValues(List<String> resultList) {
-		transactionReference = resultList.get(INDEX_TXN_REF);
-		remainingBalance = Double.parseDouble(resultList.get(INDEX_BALANCE));
-		expirationDate = DateFunctions.parseDate(resultList.get(INDEX_EXPIRATION_DATE), "redemption");
-	}
-
-	@Override
-	protected final void parseAdditionalErrorData(List<String> result) {
-		if (result.size() >= INDEX_BALANCE) {
-			remainingBalance = Double.parseDouble(result.get(INDEX_BALANCE));
+			return false;
 		}
 	}
 
@@ -54,25 +34,5 @@ public final class RedemptionResponse extends GivexResponse {
 
 	public String getTransactionReference() {
 		return transactionReference;
-	}
-
-	@Deprecated()
-	public String getReceiptMessage() {
-		return receiptMessage;
-	}
-
-	@Deprecated()
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	@Deprecated()
-	public double getRemainingBalance() {
-		return remainingBalance;
-	}
-
-	@Deprecated()
-	public boolean hasInsufficientFunds() {
-		return (result == RESULT_INSUFFICIENT_FUNDS);
 	}
 }

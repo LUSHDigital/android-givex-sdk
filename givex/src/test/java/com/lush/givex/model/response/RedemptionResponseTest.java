@@ -17,9 +17,5 @@ public class RedemptionResponseTest {
         underTest.parseResult(Arrays.asList(result));
 
         Assert.assertEquals("944601", underTest.getTransactionReference());
-        Assert.assertEquals(75.0, underTest.getRemainingBalance(), 0.0);
-        Assert.assertNull(underTest.getExpirationDate());
-        Assert.assertEquals("", underTest.getReceiptMessage());
-        Assert.assertFalse(underTest.hasInsufficientFunds());
     }
 }

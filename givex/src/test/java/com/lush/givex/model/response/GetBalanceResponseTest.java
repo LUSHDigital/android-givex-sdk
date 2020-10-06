@@ -17,7 +17,6 @@ public class GetBalanceResponseTest {
         underTest.parseResult(Arrays.asList(result));
 
         Assert.assertEquals(216.38, underTest.getBalance(), 0.0);
-        Assert.assertEquals(0.0, underTest.getPointsBalance(), 0.0);
         Assert.assertNull(underTest.getExpirationDate());
         Assert.assertEquals("GBP", underTest.getCurrencyCode());
         Assert.assertFalse(underTest.hasExpired());

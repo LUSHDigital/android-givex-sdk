@@ -18,8 +18,8 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class GetBalanceResponse extends GivexResponse {
+	private static final String NAME = "get-balance";
 	private static final int BALANCE_AMOUNT_INDEX = 2;
-	private static final int PINTS_BALANCE_INDEX = 3;
 	private static final int EXPIRATION_DATE_INDEX = 4;
 	private static final int CURRENCY_CODE_INDEX = 5;
 
@@ -27,23 +27,22 @@ public final class GetBalanceResponse extends GivexResponse {
 	public static final int RESULT_EXPIRED = 6;
 
 	private String currencyCode;
-	private double balance, pointsBalance;
+	private double balance;
 	private Date expirationDate;
 
 	@Override
-	protected void parseResult(List<String> result) {
+	protected boolean parseResult(List<String> result) {
 		if (result.size() > CURRENCY_CODE_INDEX) {
-			setValues(result);
-		} else {
-			setUnexpectedLengthError("get-balance", result.size());
-		}
-	}
+			balance = Double.parseDouble(result.get(BALANCE_AMOUNT_INDEX));
+			expirationDate = DateFunctions.parseDate(result.get(EXPIRATION_DATE_INDEX), NAME);
+			currencyCode = result.get(CURRENCY_CODE_INDEX);
 
-	private void setValues(List<String> resultList) {
-		balance = Double.parseDouble(resultList.get(BALANCE_AMOUNT_INDEX));
-		pointsBalance = Double.parseDouble(resultList.get(PINTS_BALANCE_INDEX));
-		expirationDate = DateFunctions.parseDate(resultList.get(EXPIRATION_DATE_INDEX), "get-balance");
-		currencyCode = resultList.get(CURRENCY_CODE_INDEX);
+			return true;
+		} else {
+			setUnexpectedLengthError(NAME, result.size());
+
+			return false;
+		}
 	}
 
 	@Override
@@ -57,17 +56,8 @@ public final class GetBalanceResponse extends GivexResponse {
 		return balance;
 	}
 
-	@Deprecated()
-	public double getPointsBalance() {
-		return pointsBalance;
-	}
-
 	public Date getExpirationDate() {
 		return expirationDate;
-	}
-
-	public boolean notActivated() {
-		return (result == RESULT_NOT_ACTIVATED);
 	}
 
 	public boolean hasExpired() {

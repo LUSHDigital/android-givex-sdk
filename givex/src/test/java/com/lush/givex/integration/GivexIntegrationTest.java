@@ -38,7 +38,6 @@ public final class GivexIntegrationTest {
         Assert.assertNotNull(cardActivation);
         Assert.assertFalse(cardActivation.isSuccess());
         Assert.assertFalse(cardActivation.doesNotExist());
-        Assert.assertTrue(cardActivation.alreadyActive());
     }
 
 //    @Test

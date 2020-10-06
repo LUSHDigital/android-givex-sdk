@@ -5,7 +5,9 @@ import java.util.List;
 public final class ReversalResponse extends GivexResponse {
 
 	@Override
-	protected void parseResult(List<String> result) {}
+	protected boolean parseResult(List<String> result) {
+		return true;
+	}
 
 	@Override
 	protected void parseError(List<String> error) {}

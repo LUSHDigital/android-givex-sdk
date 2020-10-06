@@ -10,11 +10,12 @@ import java.util.List;
  */
 public abstract class GivexResponse implements ResultConstants {
 	public static final int RESULT_OK = 0;
+	public static final int RESULT_NONE = -1;
 
 	protected String transactionCode, error;
 	protected int result = RESULT_NONE;
 
-	protected boolean success;
+	protected boolean parsingComplete;
 
 	public final void fromNetworkResponse(String response) {
 		final JsonRpc json = (new Gson()).fromJson(response, JsonRpc.class);
@@ -33,40 +34,61 @@ public abstract class GivexResponse implements ResultConstants {
 			error = "Unexpected result length: " + resultList.size();
 		} else {
 			transactionCode = resultList.get(INDEX_TXN_CODE);
-			parseResultCode(resultList);
+			if (parseResultCode(resultList)) {
+				switch (result) {
+					case RESULT_NONE:
+						break;
 
-			switch (result) {
-				case RESULT_NONE:
-					break;
+					case RESULT_OK:
+						parsingComplete = parseResultSafe(resultList);
+						break;
 
-				case RESULT_OK:
-					parseResult(resultList);
-					success = true;
-					break;
-
-				default:
-					error = resultList.get(INDEX_ERROR_CODE);
-					parseAdditionalErrorData(resultList);
-					break;
+					default:
+						error = resultList.get(INDEX_ERROR_CODE);
+						parsingComplete = parseAdditionalErrorDataSafe(resultList);
+						break;
+				}
 			}
 		}
 	}
 
-	private void parseResultCode(List<String> resultList) {
+	private boolean parseResultCode(List<String> resultList) {
 		final String resultCode = resultList.get(INDEX_RESULT_CODE);
 
 		try {
 			result = Integer.parseInt(resultCode);
+			return true;
 		} catch (Exception e) {
 			error = "Unexpected result code: '" + resultCode + "'";
+			return false;
 		}
 	}
 
-	protected abstract void parseResult(List<String> result);
+	private boolean parseResultSafe(List<String> result) {
+		try {
+			return parseResult(result);
+		} catch (Exception e) {
+			error = "Error when parsing the Givex result list: " + e.getMessage();
+			return false;
+		}
+	}
+
+	protected abstract boolean parseResult(List<String> result);
 	protected abstract void parseError(List<String> error);
 
+	private boolean parseAdditionalErrorDataSafe(List<String> result) {
+		try {
+			return parseAdditionalErrorData(result);
+		} catch (Exception e) {
+			error = "Error when parsing the Givex result list for additional error data: " + e.getMessage();
+			return false;
+		}
+	}
+
 	// Overwrite to set additional values in case of a known Give error.
-	protected void parseAdditionalErrorData(List<String> result) {}
+	protected boolean parseAdditionalErrorData(List<String> result) {
+		return true;
+	}
 
 	protected final void setUnexpectedLengthError(String callName, int length) {
 		result = RESULT_NONE;
@@ -86,6 +108,6 @@ public abstract class GivexResponse implements ResultConstants {
 	}
 
 	public final boolean isSuccess() {
-		return success;
+		return (result == RESULT_OK && parsingComplete);
 	}
 }

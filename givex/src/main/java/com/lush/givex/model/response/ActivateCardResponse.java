@@ -1,8 +1,6 @@
 package com.lush.givex.model.response;
 
-import com.lush.givex.util.DateFunctions;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,62 +15,19 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class ActivateCardResponse extends GivexResponse {
-	private static final int RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG = 5;
-
-	public static final int RESULT_CERTIFICATE_DOES_NOT_EXIST = 2;
-	public static final int RESULT_CARD_ALREADY_ACTIVE = 8;
-
-	private String transactionReference, receiptMessage;
-	private double balance;
-	private Date expirationDate;
+	public static final int RESULT_CERTIFICATE_DOES_NOT_EXIST = 2; // Cannot be activated.
+	public static final int RESULT_CARD_ALREADY_ACTIVATED = 8;
+	public static final int RESULT_INCORRECT_AMOUNT = 12;
 
 	@Override
-	protected void parseResult(List<String> result) {
-		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
-			setMainValues(result);
-		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
-			setMainValues(result);
-			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
-		} else {
-			setUnexpectedLengthError("activate-card", result.size());
-		}
-	}
-
-	private void setMainValues(List<String> result) {
-		transactionReference = result.get(INDEX_TXN_REF);
-		balance = Double.parseDouble(result.get(INDEX_BALANCE));
-		expirationDate = DateFunctions.parseDate(result.get(INDEX_EXPIRATION_DATE), "activate-card");
+	protected boolean parseResult(List<String> result) {
+		return true;
 	}
 
 	@Override
 	protected void parseError(List<String> error) {}
 
-	@Deprecated()
-	public double getBalance() {
-		return balance;
-	}
-
-	@Deprecated()
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	@Deprecated()
-	public String getTransactionReference() {
-		return transactionReference;
-	}
-
-	@Deprecated()
-	public String getReceiptMessage() {
-		return receiptMessage;
-	}
-
 	public boolean doesNotExist() {
 		return result == RESULT_CERTIFICATE_DOES_NOT_EXIST;
-	}
-
-	@Deprecated()
-	public boolean alreadyActive() {
-		return result == RESULT_CARD_ALREADY_ACTIVE;
 	}
 }

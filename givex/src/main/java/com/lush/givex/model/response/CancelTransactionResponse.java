@@ -16,28 +16,28 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class CancelTransactionResponse extends GivexResponse {
-	private static final int RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG = 5;
+	private static final String NAME = "cancel-transaction";
 
-	private String transactionReference, receiptMessage;
+	public static final int RESULT_WRONG_AMOUNT = 13;
+	public static final int RESULT_TXN_TOO_OLD = 15;
+
+	private String transactionReference;
 	private double remainingBalance;
 	private Date expirationDate;
 
 	@Override
-	protected void parseResult(List<String> result) {
-		if (result.size() == RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
-			setMainValues(result);
-		} else if (result.size() > RESULT_LIST_LENGTH_WITHOUT_RECEIPT_MSG) {
-			setMainValues(result);
-			receiptMessage = result.get(INDEX_RECEIPT_MESSAGE);
-		} else {
-			setUnexpectedLengthError("cancel-transaction", result.size());
-		}
-	}
+	protected boolean parseResult(List<String> result) {
+		if (result.size() > INDEX_EXPIRATION_DATE) {
+			transactionReference = result.get(INDEX_TXN_REF);
+			remainingBalance = Double.parseDouble(result.get(INDEX_BALANCE));
+			expirationDate = DateFunctions.parseDate(result.get(INDEX_EXPIRATION_DATE), NAME);
 
-	private void setMainValues(List<String> result) {
-		transactionReference = result.get(INDEX_TXN_REF);
-		remainingBalance = Double.parseDouble(result.get(INDEX_BALANCE));
-		expirationDate = DateFunctions.parseDate(result.get(INDEX_EXPIRATION_DATE), "cancel-transaction");
+			return true;
+		} else {
+			setUnexpectedLengthError(NAME, result.size());
+
+			return false;
+		}
 	}
 
 	@Override
@@ -45,11 +45,6 @@ public final class CancelTransactionResponse extends GivexResponse {
 
 	public String getTransactionReference() {
 		return transactionReference;
-	}
-
-	@Deprecated()
-	public String getReceiptMessage() {
-		return receiptMessage;
 	}
 
 	public double getRemainingBalance() {
