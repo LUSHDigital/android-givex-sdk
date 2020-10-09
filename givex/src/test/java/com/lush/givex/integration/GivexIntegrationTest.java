@@ -14,22 +14,46 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.Properties;
 
 public final class GivexIntegrationTest {
+    private static final String GIVEX_PROPS_FILE = "../local.properties";
+    private static final String GIVEX_USERNAME_PROP_NAME = "givex_test_username";
+    private static final String GIVEX_PASSWORD_PROP_NAME = "givex_test_password";
+
     private final String cardNumber = "603628851842001640659";
 
     private GivexTestHttpClient test;
 
 //    @Before
     public void setUp() throws Exception {
-        final Properties props = new Properties();
-        props.load(new FileReader("../local.properties"));
+        final Properties props = loadGivexProperties();
+        final String username = readPropertySafe(props, GIVEX_USERNAME_PROP_NAME);
+        final String password = readPropertySafe(props, GIVEX_PASSWORD_PROP_NAME);
 
-        final String username = props.getProperty("givex_test_username");
-        final String password = props.getProperty("givex_test_password");
         test = new GivexTestHttpClient(username, password, "en");
+    }
+
+    private Properties loadGivexProperties() throws IOException {
+        final File propsFile = new File(GIVEX_PROPS_FILE);
+        Assert.assertTrue("Givex properties file '" + GIVEX_PROPS_FILE + "' does not exist.", propsFile.exists());
+        Assert.assertTrue("Givex properties file '" + GIVEX_PROPS_FILE + "' is empty.", propsFile.length() > 0);
+
+        final Properties props = new Properties();
+        props.load(new FileReader(propsFile));
+
+        return props;
+    }
+
+    private String readPropertySafe(Properties props, String propertyName) {
+        final String propertyValue = props.getProperty(propertyName);
+        Assert.assertNotNull("Missing property '" + propertyName + "' in the " + GIVEX_PROPS_FILE + " Givex property file.", propertyValue);
+        Assert.assertFalse("Empty property '" + propertyName + "' in the " + GIVEX_PROPS_FILE + " Givex property file.", propertyValue.trim().isEmpty());
+
+        return propertyValue.trim();
     }
 
 //    @Test
