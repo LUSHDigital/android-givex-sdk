@@ -16,29 +16,31 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class CancelTransactionResponse extends GivexResponse {
-	private String transactionReference, receiptMessage;
+	private static final String NAME = "cancel-transaction";
+
+	public static final int RESULT_WRONG_AMOUNT = 13;
+	public static final int RESULT_TXN_TOO_OLD = 15;
+
+	private String transactionReference;
 	private double remainingBalance;
 	private Date expirationDate;
 
+	public CancelTransactionResponse(String json) {
+		super(json);
+	}
+
 	@Override
-	protected void parseResult(List<String> result) {
-		transactionCode = result.get(0);
-		this.result = Integer.parseInt(result.get(1));
-		switch (result.size()) {
-			case 7:
-				transactionReference = result.get(2);
-				remainingBalance = Double.parseDouble(result.get(3));
-				expirationDate = DateFunctions.parseDate(result.get(4), "cancel-transaction");
-				receiptMessage = result.get(5);
-				success = true;
-				break;
+	protected boolean parseResult(List<String> result) {
+		if (result.size() > INDEX_EXPIRATION_DATE) {
+			transactionReference = result.get(INDEX_TXN_REF);
+			remainingBalance = Double.parseDouble(result.get(INDEX_BALANCE));
+			expirationDate = DateFunctions.parseDate(result.get(INDEX_EXPIRATION_DATE), NAME);
 
-			case 3:
-				error = result.get(ERROR_CODE_INDEX);
-				break;
+			return true;
+		} else {
+			setUnexpectedLengthError(NAME, result.size());
 
-			default:
-				break;
+			return false;
 		}
 	}
 
@@ -47,10 +49,6 @@ public final class CancelTransactionResponse extends GivexResponse {
 
 	public String getTransactionReference() {
 		return transactionReference;
-	}
-
-	public String getReceiptMessage() {
-		return receiptMessage;
 	}
 
 	public double getRemainingBalance() {

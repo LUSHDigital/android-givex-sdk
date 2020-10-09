@@ -1,8 +1,6 @@
 package com.lush.givex.model.response;
 
-import com.lush.givex.util.DateFunctions;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,61 +15,23 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class ActivateCardResponse extends GivexResponse {
-	public static final int RESULT_CERTIFICATE_DOES_NOT_EXIST = 2;
+	public static final int RESULT_CERTIFICATE_DOES_NOT_EXIST = 2; // Cannot be activated.
+	public static final int RESULT_CARD_ALREADY_ACTIVATED = 8;
+	public static final int RESULT_INCORRECT_AMOUNT = 12;
 
-	private String transactionReference, receiptMessage;
-	private double balance;
-	private Date expirationDate;
+	public ActivateCardResponse(String json) {
+		super(json);
+	}
 
 	@Override
-	protected void parseResult(List<String> result) {
-		transactionCode = result.get(0);
-		this.result = Integer.parseInt(result.get(1));
-		switch (result.size()) {
-			case 5:
-				transactionReference = result.get(2);
-				balance = Double.parseDouble(result.get(3));
-				expirationDate = DateFunctions.parseDate(result.get(4), "activate-card");
-				success = true;
-				break;
-
-			case 6:
-				transactionReference = result.get(2);
-				balance = Double.parseDouble(result.get(3));
-				expirationDate = DateFunctions.parseDate(result.get(4), "activate-card");
-				receiptMessage = result.get(5);
-				success = true;
-				break;
-
-			case 3:
-				error = result.get(ERROR_CODE_INDEX);
-				break;
-
-			default:
-				break;
-		}
+	protected boolean parseResult(List<String> result) {
+		return true;
 	}
 
 	@Override
 	protected void parseError(List<String> error) {}
 
-	public double getBalance() {
-		return balance;
-	}
-
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public String getTransactionReference() {
-		return transactionReference;
-	}
-
-	public String getReceiptMessage() {
-		return receiptMessage;
-	}
-
 	public boolean doesNotExist() {
-		return result == RESULT_CERTIFICATE_DOES_NOT_EXIST;
+		return getResult() == RESULT_CERTIFICATE_DOES_NOT_EXIST;
 	}
 }

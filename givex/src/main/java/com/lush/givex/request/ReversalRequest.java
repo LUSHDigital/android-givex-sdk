@@ -12,7 +12,7 @@ public final class ReversalRequest extends BaseGivexRequest<ReversalResponse> {
 	}
 
 	@Override
-	protected ReversalResponse responseInstance() {
-		return new ReversalResponse();
+	protected ReversalResponse responseInstance(String json) {
+		return new ReversalResponse(json);
 	}
 }

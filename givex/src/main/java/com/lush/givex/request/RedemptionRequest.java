@@ -15,7 +15,7 @@ public final class RedemptionRequest extends BaseGivexRequest<RedemptionResponse
 	}
 
 	@Override
-	protected RedemptionResponse responseInstance() {
-		return new RedemptionResponse();
+	protected RedemptionResponse responseInstance(String json) {
+		return new RedemptionResponse(json);
 	}
 }

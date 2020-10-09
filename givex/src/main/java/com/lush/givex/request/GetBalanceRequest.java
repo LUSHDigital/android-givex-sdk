@@ -15,7 +15,7 @@ public final class GetBalanceRequest extends BaseGivexRequest<GetBalanceResponse
 	}
 
 	@Override
-	protected GetBalanceResponse responseInstance() {
-		return new GetBalanceResponse();
+	protected GetBalanceResponse responseInstance(String json) {
+		return new GetBalanceResponse(json);
 	}
 }
