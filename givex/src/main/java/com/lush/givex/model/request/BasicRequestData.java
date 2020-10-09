@@ -31,6 +31,10 @@ public abstract class BasicRequestData {
 	 */
 	public abstract ReversalRequestData getReversalData();
 
+	public final boolean isReversible() {
+		return getReversalData() != null;
+	}
+
 	/**
 	 * Returns the request name to be used in log messages.
 	 */

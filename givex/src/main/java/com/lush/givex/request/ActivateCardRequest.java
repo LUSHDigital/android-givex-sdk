@@ -15,7 +15,7 @@ public final class ActivateCardRequest extends BaseGivexRequest<ActivateCardResp
 	}
 
 	@Override
-	protected ActivateCardResponse responseInstance() {
-		return new ActivateCardResponse();
+	protected ActivateCardResponse responseInstance(String json) {
+		return new ActivateCardResponse(json);
 	}
 }

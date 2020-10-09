@@ -12,38 +12,35 @@ import com.lush.givex.model.response.ReversalResponse;
 import com.lush.givex.request.ReversalRequest;
 
 /**
- * This request handler implements the Givex single request flow. The request will be sent and in case
+ * This request handler implements the Givex reversible request flow. The request will be sent and in case
  * of a network error a Givex request reversal is send and the parent notified. Errors in reversals are
  * logged but not communicated to the caller.
  *
  * @param <R> the response type of the responses returned by requests handled by this handler.
  */
-final class GivexReversableRequestHandler<R> implements Response.Listener<ReversalResponse>, Response.ErrorListener {
+final class GivexReversibleRequestHandler<R> implements Response.Listener<ReversalResponse>, Response.ErrorListener {
     private final RequestQueue queue;
     private final int timeoutMillis;
-    private final String baseUrl;
-    private final boolean propagateTimeoutError;
+    private final GivexUrl url;
     private final String name;
-    private final Response.ErrorListener parentListener;
+    private final Response.ErrorListener parentErrorListener;
 
     private ReversalRequest requestReversal;
 
-    GivexReversableRequestHandler(RequestQueue queue, int timeoutMillis, String baseUrl, boolean propagateTimeoutError, String name, Response.ErrorListener parentListener) {
+    GivexReversibleRequestHandler(RequestQueue queue, int timeoutMillis, GivexUrl url, String name, Response.ErrorListener parentErrorListener) {
         this.queue = queue;
         this.timeoutMillis = timeoutMillis;
-        this.baseUrl = baseUrl;
-        this.propagateTimeoutError = propagateTimeoutError;
+        this.url = url;
         this.name = name;
-        this.parentListener = parentListener;
+        this.parentErrorListener = parentErrorListener;
     }
 
-    void send(BasicRequestData data, GivexRequestFactory<R> requestFactory, Response.Listener<R> listener, Response.ErrorListener errorListener) {
+    void send(BasicRequestData data, GivexRequestFactory<R> requestFactory, Response.Listener<R> listener) {
         final Response.ErrorListener localErrorListener = buildLocalErrorListener();
-        final GivexErrorInterceptor errorInterceptor = new GivexErrorInterceptor(errorListener, localErrorListener, propagateTimeoutError);
-        final Request<R> request = requestFactory.buildRequest(data, baseUrl, timeoutMillis, listener, errorInterceptor);
+        final Request<R> request = requestFactory.buildRequest(data, url.url, timeoutMillis, listener, localErrorListener);
 
         final BasicRequestData reversalData = data.getReversalData();
-        requestReversal = new ReversalRequest(reversalData, baseUrl, this, this);
+        requestReversal = new ReversalRequest(reversalData, url.url, this, this);
 
         queue.add(request);
     }
@@ -55,7 +52,7 @@ final class GivexReversableRequestHandler<R> implements Response.Listener<Revers
                 Log.d(getClass().getSimpleName(), buildLogMessageStart() + " returned a network error (" + error.getMessage() + "). Will send a reversal.");
 
                 queue.add(requestReversal);
-                parentListener.onErrorResponse(error);
+                parentErrorListener.onErrorResponse(error);
             }
         };
     }
@@ -81,7 +78,7 @@ final class GivexReversableRequestHandler<R> implements Response.Listener<Revers
     }
 
     private String buildLogMessageStart() {
-        final String type = propagateTimeoutError ? "Secondary " : "Primary ";
+        final String type = url.isPrimary ? "Primary " : "Secondary ";
 
         return type + name + " request ";
     }

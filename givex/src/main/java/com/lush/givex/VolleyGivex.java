@@ -1,7 +1,6 @@
 package com.lush.givex;
 
 
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.lush.givex.fallback.GivexBackedUpRequestHandler;
@@ -20,31 +19,32 @@ import com.lush.givex.model.response.CashBackResponse;
 import com.lush.givex.model.response.GetBalanceResponse;
 import com.lush.givex.model.response.RedemptionResponse;
 import com.lush.givex.model.response.TopUpCardResponse;
-import com.lush.givex.request.GetBalanceRequest;
 import com.lush.givex.request.factories.ActivateCardRequestFactory;
 import com.lush.givex.request.factories.CancelTransactionRequestFactory;
 import com.lush.givex.request.factories.CashBackRequestFactory;
+import com.lush.givex.request.factories.GetBalanceRequestFactory;
 import com.lush.givex.request.factories.RedemptionRequestFactory;
 import com.lush.givex.request.factories.TopUpCardRequestFactory;
 
 final class VolleyGivex implements Givex {
 	private final RequestQueue queue;
 	private final int timeoutMillis;
-	private final String username, password, languageCode, baseUrl, fallbackUrl;
+	private final String username, password, languageCode, primaryUrl, secondaryUrl;
 
 	private final GivexRequestFactory<ActivateCardResponse> activateCardRequestFactory = new ActivateCardRequestFactory();
 	private final GivexRequestFactory<CancelTransactionResponse> cancelTransactionRequestFactory = new CancelTransactionRequestFactory();
-	private final GivexRequestFactory<TopUpCardResponse> topUpCardRequestFactory = new TopUpCardRequestFactory();
-	private final GivexRequestFactory<RedemptionResponse> redemptionRequestFactory = new RedemptionRequestFactory();
 	private final GivexRequestFactory<CashBackResponse> cashBackRequestFactory = new CashBackRequestFactory();
+	private final GivexRequestFactory<GetBalanceResponse> getBalanceRequestFactory = new GetBalanceRequestFactory();
+	private final GivexRequestFactory<RedemptionResponse> redemptionRequestFactory = new RedemptionRequestFactory();
+	private final GivexRequestFactory<TopUpCardResponse> topUpCardRequestFactory = new TopUpCardRequestFactory();
 
 	VolleyGivex(RequestQueue queue, GivexConfig config) {
 		this.queue = queue;
 		this.username = config.username;
 		this.password = config.password;
 		this.languageCode = config.languageCode;
-		this.baseUrl = config.baseUrl;
-		this.fallbackUrl = config.fallbackUrl;
+		this.primaryUrl = config.baseUrl;
+		this.secondaryUrl = config.fallbackUrl;
 		this.timeoutMillis = config.timeoutMillis;
 	}
 
@@ -56,7 +56,7 @@ final class VolleyGivex implements Givex {
 	// This method is not private for test purposes only.
 	void activateCard(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<ActivateCardResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new ActivateCardRequestData(username, password, languageCode, transactionCode, amount, cardNumber, securityCode);
-		final GivexBackedUpRequestHandler<ActivateCardResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<ActivateCardResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<ActivateCardResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<ActivateCardResponse>(queue, timeoutMillis, primaryUrl, secondaryUrl);
 		requestHandler.send(data, activateCardRequestFactory, listener, errorListener);
 	}
 
@@ -67,7 +67,7 @@ final class VolleyGivex implements Givex {
 
 	private void cancelTransaction(String transactionCode, String cardNumber, double amount, String givexAuthCode, String securityCode, Response.Listener<CancelTransactionResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new CancelTransactionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, givexAuthCode, securityCode);
-		final GivexBackedUpRequestHandler<CancelTransactionResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<CancelTransactionResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<CancelTransactionResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<CancelTransactionResponse>(queue, timeoutMillis, primaryUrl, secondaryUrl);
 		requestHandler.send(data, cancelTransactionRequestFactory, listener, errorListener);
 	}
 
@@ -82,8 +82,8 @@ final class VolleyGivex implements Givex {
 	// This method is not private for test purposes only.
 	void getBalance(String cardNumber, String transactionCode, String securityCode, Response.Listener<GetBalanceResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new GetBalanceRequestData(username, languageCode, transactionCode, cardNumber, securityCode);
-		final Request<GetBalanceResponse> request = new GetBalanceRequest(data, baseUrl, timeoutMillis, listener, errorListener);
-		queue.add(request);
+		final GivexBackedUpRequestHandler<GetBalanceResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<GetBalanceResponse>(queue, timeoutMillis, primaryUrl, secondaryUrl);
+		requestHandler.send(data, getBalanceRequestFactory, listener, errorListener);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ final class VolleyGivex implements Givex {
 	// This method is not private for test purposes only.
 	void topUp(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<TopUpCardResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new TopUpCardRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		final GivexBackedUpRequestHandler<TopUpCardResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<TopUpCardResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<TopUpCardResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<TopUpCardResponse>(queue, timeoutMillis, primaryUrl, secondaryUrl);
 		requestHandler.send(data, topUpCardRequestFactory, listener, errorListener);
 	}
 
@@ -106,7 +106,7 @@ final class VolleyGivex implements Givex {
 	// This method is not private for test purposes only.
 	void redeem(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<RedemptionResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new RedemptionRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		final GivexBackedUpRequestHandler<RedemptionResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<RedemptionResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<RedemptionResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<RedemptionResponse>(queue, timeoutMillis, primaryUrl, secondaryUrl);
 		requestHandler.send(data, redemptionRequestFactory, listener, errorListener);
 	}
 
@@ -117,7 +117,7 @@ final class VolleyGivex implements Givex {
 
 	private void cashBack(String cardNumber, double amount, String transactionCode, String securityCode, Response.Listener<CashBackResponse> listener, Response.ErrorListener errorListener) {
 		final BasicRequestData data = new CashBackRequestData(username, password, languageCode, transactionCode, cardNumber, amount, securityCode);
-		final GivexBackedUpRequestHandler<CashBackResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<CashBackResponse>(queue, timeoutMillis, baseUrl, fallbackUrl);
+		final GivexBackedUpRequestHandler<CashBackResponse> requestHandler = new GivexBackedUpRequestHandlerImpl<CashBackResponse>(queue, timeoutMillis, primaryUrl, secondaryUrl);
 		requestHandler.send(data, cashBackRequestFactory, listener, errorListener);
 	}
 

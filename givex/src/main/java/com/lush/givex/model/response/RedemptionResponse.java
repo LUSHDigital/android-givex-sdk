@@ -1,8 +1,6 @@
 package com.lush.givex.model.response;
 
-import com.lush.givex.util.DateFunctions;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,64 +14,23 @@ import java.util.List;
  * @author Matt Allen
  */
 public final class RedemptionResponse extends GivexResponse {
-	private static final int TXN_CODE_INDEX = 0;
-	private static final int RESULT_CODE_INDEX = 1;
-	private static final int TXN_REF_INDEX = 2;
-	private static final int REMAINING_BALANCE_AMOUNT_INDEX = 3;
-	private static final int EXPIRATION_DATE_INDEX = 4;
-	private static final int RECEIPT_MESSAGE_INDEX = 5;
-
 	public static final int RESULT_INSUFFICIENT_FUNDS = 9;
 
-	private String transactionReference, receiptMessage;
-	private Date expirationDate;
-	private double remainingBalance;
+	private String transactionReference;
+
+	public RedemptionResponse(String json) {
+		super(json);
+	}
 
 	@Override
-	protected void parseResult(List<String> result) {
-		switch (result.size()) {
-			case 3:
-				parseBasicErrorResult(result);
-				break;
-
-			case 4:
-				parseErrorResultWithBalance(result);
-				break;
-
-			default:
-				parseNonErrorResult(result);
-				break;
-		}
-	}
-
-	private void parseBasicErrorResult(List<String> resultList) {
-		transactionCode = resultList.get(TXN_CODE_INDEX);
-		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-		error = resultList.get(ERROR_CODE_INDEX);
-	}
-
-	private void parseErrorResultWithBalance(List<String> resultList) {
-		parseBasicErrorResult(resultList);
-		remainingBalance = Double.parseDouble(resultList.get(REMAINING_BALANCE_AMOUNT_INDEX));
-	}
-
-	private void parseNonErrorResult(List<String> resultList) {
-		if (resultList.size() > RECEIPT_MESSAGE_INDEX) {
-			parseValidResult(resultList);
+	protected boolean parseResult(List<String> result) {
+		if (result.size() > INDEX_TXN_REF) {
+			transactionReference = result.get(INDEX_TXN_REF);
+			return true;
 		} else {
-			this.error = "Unexpected length of 'result' array-node of the Givex redemption response: " + resultList.size();
+			setUnexpectedLengthError("redemption", result.size());
+			return false;
 		}
-	}
-
-	private void parseValidResult(List<String> resultList) {
-		transactionCode = resultList.get(TXN_CODE_INDEX);
-		result = Integer.parseInt(resultList.get(RESULT_CODE_INDEX));
-		transactionReference = resultList.get(TXN_REF_INDEX);
-		remainingBalance = Double.parseDouble(resultList.get(REMAINING_BALANCE_AMOUNT_INDEX));
-		expirationDate = DateFunctions.parseDate(resultList.get(EXPIRATION_DATE_INDEX), "redemption");
-		receiptMessage = resultList.get(RECEIPT_MESSAGE_INDEX);
-
-		success = true;
 	}
 
 	@Override
@@ -81,21 +38,5 @@ public final class RedemptionResponse extends GivexResponse {
 
 	public String getTransactionReference() {
 		return transactionReference;
-	}
-
-	public String getReceiptMessage() {
-		return receiptMessage;
-	}
-
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public double getRemainingBalance() {
-		return remainingBalance;
-	}
-
-	public boolean hasInsufficientFunds() {
-		return (result == RESULT_INSUFFICIENT_FUNDS);
 	}
 }

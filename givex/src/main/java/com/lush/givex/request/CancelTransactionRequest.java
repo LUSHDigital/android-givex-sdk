@@ -15,7 +15,7 @@ public final class CancelTransactionRequest extends BaseGivexRequest<CancelTrans
 	}
 
 	@Override
-	protected CancelTransactionResponse responseInstance() {
-		return new CancelTransactionResponse();
+	protected CancelTransactionResponse responseInstance(String json) {
+		return new CancelTransactionResponse(json);
 	}
 }

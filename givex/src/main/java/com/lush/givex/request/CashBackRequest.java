@@ -15,7 +15,7 @@ public final class CashBackRequest extends BaseGivexRequest<CashBackResponse> {
 	}
 
 	@Override
-	protected CashBackResponse responseInstance() {
-		return new CashBackResponse();
+	protected CashBackResponse responseInstance(String json) {
+		return new CashBackResponse(json);
 	}
 }
